@@ -4,7 +4,6 @@
 #include <math.h>
 #include <time.h>
 
-float move_x=0,move_y=0, scaling=1,angle=0;
 void redraw(){
     float raggio=0.55, raggio2=0.12, temp=raggio;
     float radians=3.14/180;
@@ -27,23 +26,17 @@ void redraw(){
 void specialKeyListener(int key, int x, int y){
     switch(key){
         case(GLUT_KEY_LEFT):
-            move_x-=0.1;
-            glTranslatef(move_x,0,0);
+            glTranslatef(-0.1,0,0);
             break;
         case (GLUT_KEY_UP):
-            move_y+=0.1;
-            glTranslatef(0,move_y,0);
+            glTranslatef(0,0.1,0);
             break;
         case(GLUT_KEY_RIGHT):
-            move_x+=0.1;
-            glTranslatef(move_x,0,0);
+            glTranslatef(0.1,0,0);
             break;
         case(GLUT_KEY_DOWN):
-            move_y-=0.1;
-            glTranslatef(0,move_y,0);
+            glTranslatef(0,-0.1,0);
             break;
-        default:
-            printf("444");
     }
     glutPostRedisplay();
 }
@@ -51,23 +44,19 @@ void specialKeyListener(int key, int x, int y){
 void keyListener(unsigned char key, int x, int y){
         switch(key){
         case 'w':
-            scaling+=0.1;
-            glScalef(scaling,scaling,0);
+            glScalef(1.1,1.1,0);
             break;
 
         case 's':
-            scaling-=0.1;
-            glScalef(scaling,scaling,0);
+            glScalef(0.9,0.9,0);
             break;
 
         case 'a':
-            angle+=2;
-            glRotatef(angle,0,0,1);
+            glRotatef(2,0,0,1);
             break;
 
         case 'd':
-            angle-=2;
-            glRotatef(angle,0,0,1);
+            glRotatef(-2,0,0,1);
             break;
         }
         glutPostRedisplay();
