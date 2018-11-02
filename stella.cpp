@@ -52,8 +52,8 @@ void mouseMotionListener(int x, int y){
         yTranslate=(2.0*(float)y)/heigth;
         printf("%f, %f\n",xTranslate-1, yTranslate-1);
     if (move && stati[0]==GLUT_DOWN){
-        glLoadIdentity();
         glTranslatef(xTranslate-1,-(yTranslate-1),0);
+        glLoadIdentity();
     }
 }
 
@@ -114,15 +114,21 @@ void keyListener(unsigned char key, int x, int y){
             break;
 
         case 'r':
-            rotate=!rotate;      
+            rotate=!rotate; 
+            move=false;
+            scale=false;     
             break;  
 
         case 'z':
             scale=!scale;
+            move=false;
+            rotate=false;
             break;
 
         case 'm':
             move=!move;
+            scale=false;
+            rotate=false;
             break;
         }
         glutPostRedisplay();

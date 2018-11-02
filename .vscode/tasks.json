@@ -10,7 +10,10 @@
             "args": [
                 "-g",
                     "-std=c++11",
-                    "stella.cpp",
+                    "./crono/cronometro.cpp",
+                    "./crono/Quadrante.cpp",
+                    "./crono/Tasto.cpp",
+                    "./crono/Lancetta.cpp",
                     "-lmingw32",
                     "-lopengl32",
                     "-lglut32",
