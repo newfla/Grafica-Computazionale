@@ -20,8 +20,7 @@ void redraw(void){
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         glLoadIdentity();
     //3D MODE
-        glOrtho(-1,1,-1,1,1,5);
-        glTranslatef(0,0,-3);
+        glOrtho(-1,1,-1,1,-1,1);
 
     //CRONO ROTATION AND DRAWING
         quadrante.draw();
