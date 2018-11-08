@@ -29,10 +29,10 @@
                     "args": [
                         "-g",
                         "-std=c++11",
-                        "./casa/casetta.cpp",
-                        "./casa/Point.cpp",
-                        "./casa/Face.cpp",
-                        "./casa/Figure.cpp",
+                        "./crono/cronometro.cpp",
+                        "./crono/Quadrante.cpp",
+                        "./crono/Tasto.cpp",
+                        "./crono/Lancetta.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"
