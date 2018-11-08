@@ -11,7 +11,7 @@
 namespace Mesh{
     class Point;
     class Face;
-    class House;
+    class Figure;
 };
 
 class Mesh::Point{
@@ -31,14 +31,14 @@ class Mesh::Face{
         Point* normal=NULL;
 };
 
-class Mesh::House{
+class Mesh::Figure{
     private:
         std::vector<Face> faces;
         std::vector<Point> buildPoints();
     
     public:
         void draw();
-        House();
+        Figure();
 };
 
 #endif

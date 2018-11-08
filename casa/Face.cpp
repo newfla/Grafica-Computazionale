@@ -3,6 +3,7 @@ using namespace std;
 Mesh::Point Mesh::Face::getNormal(){
     float x=0, y=0,z=0;
     if(normal==NULL){
+
         for(short int i=0; i<vertex.size(); i++){
             Point first=vertex.at(i),
                     second=vertex.at((i+1)%vertex.size());

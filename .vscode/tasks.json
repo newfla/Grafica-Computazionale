@@ -34,7 +34,7 @@
                 "./casa/casetta.cpp",
                 "./casa/Point.cpp",
                 "./casa/Face.cpp",
-                "./casa/House.cpp",
+                "./casa/Figure.cpp",
                 "-lmingw32",
                 "-lopengl32",
                 "-lglut32",
