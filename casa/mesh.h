@@ -18,7 +18,6 @@ class Mesh::Point{
     public:
         Point (float x, float y, float z);
         float* getCoords();
-    
     private:
         std::vector<float> coords;
 };

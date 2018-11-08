@@ -1,5 +1,5 @@
 #include "mesh.h"
-
+using namespace std;
 Mesh::Point::Point(float x, float y, float z){
     coords.push_back(x);
     coords.push_back(y);

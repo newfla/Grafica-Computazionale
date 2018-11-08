@@ -62,23 +62,37 @@ Mesh::Figure::Figure(){
 }
 
 void Mesh::Figure::draw(){
-
             for(short int i = 0; i < faces.size(); i++)
             {
-                glColor3f(1,1,1);
-                glBegin(GL_POLYGON);
-                    Face temp= faces.at(i);
-                    float* normal= temp.getNormal().getCoords();
-                 //   cout<<"Normale della faccia anteriore\n"<<normal[0]<<" __ "<<normal[1]<<" __ "<<normal[2]<<endl;
-                    glNormal3fv(normal);
-                   // cout<<"Vertici faccia anteriore: "<<endl;
-                    for(short int j = 0; j < temp.vertex.size(); j++){
-                        glVertex3fv(temp.vertex.at(j).getCoords()); 
-                       /* cout<<temp.vertex.at(j).getCoords()[0]<<" _ ";
-                        cout<<temp.vertex.at(j).getCoords()[1]<<" _ ";
-                        cout<<temp.vertex.at(j).getCoords()[2]<<endl;*/
-                    }  
-                glEnd();     
+                float median[3]={0,0,0};
+                glEnable(GL_LIGHTING);
+                    glBegin(GL_POLYGON);
+                        Face temp= faces.at(i);
+                        Point point=temp.getNormal();
+                        float* normal=point.getCoords();
+                        glNormal3fv(normal);
+                    // cout<<"Vertici faccia anteriore: "<<endl;
+                        for(short int j = 0; j < temp.vertex.size(); j++){
+                            glVertex3fv(temp.vertex.at(j).getCoords());
+                            median[0]=temp.vertex.at(j).getCoords()[0];
+                            median[1]=temp.vertex.at(j).getCoords()[1];
+                            median[2]=temp.vertex.at(j).getCoords()[2];
+                        }
+                    glEnd();
+
+              /*  median[0]/=(float)temp.vertex.size();
+                median[1]/=(float)temp.vertex.size();
+                median[1]/=(float)temp.vertex.size();*/
+
+                glDisable(GL_LIGHTING);
+                    if(i==1){
+                        glColor3f(1,0,0);
+                        glBegin(GL_LINES);
+                        glVertex3fv(median);
+                        glVertex3f(median[0]+normal[0]*10,median[1]+normal[1]*10,median[1]+normal[1]*10);
+                    glEnd(); 
+                    }
+                
             }
         
 }
