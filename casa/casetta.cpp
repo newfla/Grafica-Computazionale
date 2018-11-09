@@ -4,30 +4,34 @@
 #include<iostream>
 #include"mesh.h"
 #include <math.h>
+using namespace std;
+
 //WINDOW PARAM
-    float width=600, heigth=600;
+    float width=700, heigth=700;
     float rotate[2]={0,0};
     int windowPos[2]={383,154};
 //CAMERA PARAM
-    double camera[3]={0.25,0.35,1};
-  //  double direction[3]={0,0,0};
-    double center[3]={0.25,0.35,0.5};
+    double center[3]={6.5,7.1,7.5};
+    double camera[3]={6.5,7.1,2};
     double up_vector[3]={0,1,0};
-    float angle[2]={0,0};
-    int plane[2]={1,4};
+    double angle[2]={0,0};
+    float plane[2]={1,10};
+    double dist=center[2]-camera[2];
 
 //OUR HOUSE
-Mesh::Figure casa;
+    Mesh::Figure casa;
 
 void redraw(void){
     //CLEAR
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         glLoadIdentity();
-        gluPerspective(120,width/heigth,plane[0], plane[1]);
+        gluPerspective(150,width/heigth,plane[0], plane[1]);
+
 
     //REGOLAZIONE PUNTO DI VISTA
         glPushMatrix();
-            gluLookAt(camera[0],camera[1],camera[2],center[0],center[1],center[2],up_vector[0],up_vector[1],up_vector[2]);       
+            gluLookAt(camera[0],camera[1],
+            camera[2],center[0],center[1],center[2],up_vector[0],up_vector[1],up_vector[2]);       
             casa.draw();
         glPopMatrix();
     glFlush();
@@ -37,7 +41,7 @@ void keyboardListener(unsigned char key, int x, int y){
     switch (key){
         case 'A':
         case 'a':
-            angle[0]-=0.1;
+            angle[0]-=2;
             break;
 
         case 'S':
@@ -47,7 +51,7 @@ void keyboardListener(unsigned char key, int x, int y){
 
         case 'D':
         case 'd':
-            angle[0]+=0.1;
+            angle[0]+=2;
             break;
 
         case 'W':
@@ -55,18 +59,17 @@ void keyboardListener(unsigned char key, int x, int y){
             angle[1]+=2;
             break;
     }
-    //Rotazione intorno all'oggetto con y fermo;
-    int dist=plane[1]-plane[0];
-    camera[0]=dist*cos(angle[0]);
-    camera[2]=dist*sin(angle[0]);
-    if(angle[1]>60)
+    //Rotazione intorno all'oggetto;
+    camera[0]=center[0]+(dist*cos(angle[0]*((double)M_PI/180.0)));
+    camera[2]=center[2]+(dist*sin(angle[0]*((double)M_PI/180.0)));
+
+    //Guardare dall'alto e dal basso l'oggetto entro i 60gradi
+    if(angle[1]<-60.0)
+        angle[1]=-60.0;
+    else if(angle[1]>60.0)
         angle[1]=60;
-    else if(angle[1]<-60)
-        angle[1]=-60;
-    camera[1]=dist*cos(angle[1]*M_PI/180);
-    std::cout<<angle[1]<<std::endl;
-    //direction[0]=-cos(angle[0]);
-    //direction[1]=-sin(angle[0]);
+    if(angle[1]!=0)
+        camera[1]=center[1]+(dist*sin(angle[1]*((double)M_PI/180.0)));
 
     glutPostRedisplay();
 }

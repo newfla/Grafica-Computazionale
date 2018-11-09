@@ -7,6 +7,7 @@
 #include<vector>
 #include<math.h>
 #include <iostream>
+using namespace std;
 
 namespace Mesh{
     class Point;

@@ -21,6 +21,16 @@
         "streambuf": "cpp",
         "system_error": "cpp",
         "type_traits": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "array": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "fstream": "cpp",
+        "optional": "cpp",
+        "sstream": "cpp",
+        "string_view": "cpp",
+        "cinttypes": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp"
     }
 }

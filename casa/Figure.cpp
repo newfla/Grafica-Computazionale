@@ -1,5 +1,5 @@
 #include "mesh.h"
-using namespace std;
+
 Mesh::Figure::Figure(){
     vector<Point> points=buildPoints();
     Face anteriore,posteriore, pavimento, laterale_dx,
@@ -14,11 +14,11 @@ Mesh::Figure::Figure(){
 
 
     //ISTANZIAZIONE FACCIA POSTERIORE
-        posteriore.vertex.push_back(points.at(0));
-        posteriore.vertex.push_back(points.at(1));
-        posteriore.vertex.push_back(points.at(2));
-        posteriore.vertex.push_back(points.at(3));
         posteriore.vertex.push_back(points.at(4));
+        posteriore.vertex.push_back(points.at(3));
+        posteriore.vertex.push_back(points.at(2));
+        posteriore.vertex.push_back(points.at(1));
+        posteriore.vertex.push_back(points.at(0));
 
     //ISTANZIAZIONE FACCIA LATERALE DX
         laterale_dx.vertex.push_back(points.at(1));
@@ -27,10 +27,10 @@ Mesh::Figure::Figure(){
         laterale_dx.vertex.push_back(points.at(6));
 
     //ISTANZIAZIONE FACCIA LATERALE SX
-        laterale_sx.vertex.push_back(points.at(0));
-        laterale_sx.vertex.push_back(points.at(4));
-        laterale_sx.vertex.push_back(points.at(9));
         laterale_sx.vertex.push_back(points.at(5));
+        laterale_sx.vertex.push_back(points.at(9));
+        laterale_sx.vertex.push_back(points.at(4));
+        laterale_sx.vertex.push_back(points.at(0));
 
     //ISTANZIAZIONE TETTO DX
         tetto_dx.vertex.push_back(points.at(2));
@@ -45,10 +45,10 @@ Mesh::Figure::Figure(){
         tetto_sx.vertex.push_back(points.at(8));
 
     //ISTANZIAZIONE PAVIMENTO
-        pavimento.vertex.push_back(points.at(0));
-        pavimento.vertex.push_back(points.at(5));
-        pavimento.vertex.push_back(points.at(6));
         pavimento.vertex.push_back(points.at(1));
+        pavimento.vertex.push_back(points.at(6));
+        pavimento.vertex.push_back(points.at(5));
+        pavimento.vertex.push_back(points.at(0));
 
 
     faces.push_back(anteriore);
@@ -62,6 +62,7 @@ Mesh::Figure::Figure(){
 }
 
 void Mesh::Figure::draw(){
+            int coff_normal=3;
             for(short int i = 0; i < faces.size(); i++)
             {
                 float median[3]={0,0,0};
@@ -71,27 +72,25 @@ void Mesh::Figure::draw(){
                         Point point=temp.getNormal();
                         float* normal=point.getCoords();
                         glNormal3fv(normal);
-                    // cout<<"Vertici faccia anteriore: "<<endl;
+                        
                         for(short int j = 0; j < temp.vertex.size(); j++){
                             glVertex3fv(temp.vertex.at(j).getCoords());
-                            median[0]=temp.vertex.at(j).getCoords()[0];
-                            median[1]=temp.vertex.at(j).getCoords()[1];
-                            median[2]=temp.vertex.at(j).getCoords()[2];
+                            median[0]+=temp.vertex.at(j).getCoords()[0];
+                            median[1]+=temp.vertex.at(j).getCoords()[1];
+                            median[2]+=temp.vertex.at(j).getCoords()[2];
                         }
                     glEnd();
 
-              /*  median[0]/=(float)temp.vertex.size();
+                median[0]/=(float)temp.vertex.size();
                 median[1]/=(float)temp.vertex.size();
-                median[1]/=(float)temp.vertex.size();*/
+                median[2]/=(float)temp.vertex.size();
 
                 glDisable(GL_LIGHTING);
-                    if(i==1){
-                        glColor3f(1,0,0);
-                        glBegin(GL_LINES);
+                    glBegin(GL_LINES);
                         glVertex3fv(median);
-                        glVertex3f(median[0]+normal[0]*10,median[1]+normal[1]*10,median[1]+normal[1]*10);
+                        glColor3f(0,0,1);
+                        glVertex3f(median[0]+normal[0]*coff_normal,median[1]+normal[1]*coff_normal,median[2]+normal[2]*coff_normal);
                     glEnd(); 
-                    }
                 
             }
         
@@ -100,16 +99,29 @@ void Mesh::Figure::draw(){
 
 vector<Mesh::Point> Mesh::Figure::buildPoints(){
     vector<Point> points;
-    points.push_back(*(new Point(0,0,1)));
-    points.push_back(*(new Point(0.5,0,1)));
-    points.push_back(*(new Point(0.5,0.5,1)));
-    points.push_back(*(new Point(0.25,0.7,1)));
-    points.push_back(*(new Point(0,0.5,1)));
-    points.push_back(*(new Point(0,0,0)));
-    points.push_back(*(new Point(0.5,0,0)));
-    points.push_back(*(new Point(0.5,0.5,0)));
-    points.push_back(*(new Point(0.25,0.7,0)));
-    points.push_back(*(new Point(0,0.5,0)));
+    points.push_back(*(new Point(5,5,5)));
+    points.push_back(*(new Point(8,5,5)));
+    points.push_back(*(new Point(8,8,5)));
+    points.push_back(*(new Point(6.5,9.5,5)));
+    points.push_back(*(new Point(5,8,5)));
+    points.push_back(*(new Point(5,5,10)));
+    points.push_back(*(new Point(8,5,10)));
+    points.push_back(*(new Point(8,8,10)));
+    points.push_back(*(new Point(6.5,9.5,10)));
+    points.push_back(*(new Point(5,8,10)));
+    float x=0,y=0,z=0;
+    
+    for(short int i = 0; i < points.size(); i++)
+    {
+        x+=points.at(i).getCoords()[0];
+        y+=points.at(i).getCoords()[1];
+        z+=points.at(i).getCoords()[2];
+    }
+    x/=points.size();
+    y/=points.size();
+    z/=points.size();
+    cout<<"Media x|y|z:"<<x<<"|"<<y<<"|"<<z<<endl;
+    
     return points;
 
 }
