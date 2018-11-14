@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<mesh>
+    <pointlist>
+        <point id="0" x="5" y="5" z="5"/>
+        <point id="1" x="8" y="5" z="5"/>
+        <point id="2" x="8" y="8" z="5"/>
+        <point id="3" x="6.5" y="9.5" z="5"/>
+        <point id="4" x="5" y="8" z="5"/>
+        <point id="5" x="5" y="5" z="10"/>
+        <point id="6" x="8" y="5" z="10"/>
+        <point id="7" x="8" y="8" z="10"/>
+        <point id="8" x="6.5" y="9.5" z="10"/>
+        <point id="9" x="5" y="8" z="10"/>
+    </pointlist>
+    <facelist>
+        <face>
+            <ref>5</ref>
+            <ref>6</ref>
+            <ref>7</ref>
+            <ref>8</ref>
+            <ref>9</ref>
+        </face>
+
+        <face>
+            <ref>4</ref>
+            <ref>3</ref>
+            <ref>2</ref>
+            <ref>1</ref>
+            <ref>0</ref>
+        </face>
+
+        <face>
+            <ref>1</ref>
+            <ref>2</ref>
+            <ref>7</ref>
+            <ref>6</ref>
+        </face>
+
+        <face>
+            <ref>0</ref>
+            <ref>5</ref>
+            <ref>9</ref>
+            <ref>4</ref>
+        </face>
+
+        <face>
+            <ref>3</ref>
+            <ref>8</ref>
+            <ref>7</ref>
+            <ref>2</ref>
+        </face>
+
+        <face>
+            <ref>9</ref>
+            <ref>8</ref>
+            <ref>3</ref>
+            <ref>4</ref>
+        </face>
+
+        <face>
+            <ref>1</ref>
+            <ref>6</ref>
+            <ref>5</ref>
+            <ref>0</ref>
+        </face>
+      
+    </facelist>
+</mesh>

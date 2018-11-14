@@ -1,68 +1,14 @@
 #include "mesh.h"
+#include "../dependencies/tinyxml2.h"
+#include <map>
+using namespace tinyxml2;
 
 Mesh::Figure::Figure(){
-    vector<Point> points=buildPoints();
-    Face anteriore,posteriore, pavimento, laterale_dx,
-        laterale_sx, tetto_sx, tetto_dx;
-        
-    //ISTANZIAZIONE FACCIA FRONTALE
-        anteriore.vertex.push_back(points.at(5));
-        anteriore.vertex.push_back(points.at(6));
-        anteriore.vertex.push_back(points.at(7));
-        anteriore.vertex.push_back(points.at(8));
-        anteriore.vertex.push_back(points.at(9));
-
-
-    //ISTANZIAZIONE FACCIA POSTERIORE
-        posteriore.vertex.push_back(points.at(4));
-        posteriore.vertex.push_back(points.at(3));
-        posteriore.vertex.push_back(points.at(2));
-        posteriore.vertex.push_back(points.at(1));
-        posteriore.vertex.push_back(points.at(0));
-
-    //ISTANZIAZIONE FACCIA LATERALE DX
-        laterale_dx.vertex.push_back(points.at(1));
-        laterale_dx.vertex.push_back(points.at(2));
-        laterale_dx.vertex.push_back(points.at(7));
-        laterale_dx.vertex.push_back(points.at(6));
-
-    //ISTANZIAZIONE FACCIA LATERALE SX
-        laterale_sx.vertex.push_back(points.at(5));
-        laterale_sx.vertex.push_back(points.at(9));
-        laterale_sx.vertex.push_back(points.at(4));
-        laterale_sx.vertex.push_back(points.at(0));
-
-    //ISTANZIAZIONE TETTO DX
-        tetto_dx.vertex.push_back(points.at(2));
-        tetto_dx.vertex.push_back(points.at(3));
-        tetto_dx.vertex.push_back(points.at(8));
-        tetto_dx.vertex.push_back(points.at(7));
-
-    //ISTANZIAZIONE TETTO SX
-        tetto_sx.vertex.push_back(points.at(3));
-        tetto_sx.vertex.push_back(points.at(4));
-        tetto_sx.vertex.push_back(points.at(9));
-        tetto_sx.vertex.push_back(points.at(8));
-
-    //ISTANZIAZIONE PAVIMENTO
-        pavimento.vertex.push_back(points.at(1));
-        pavimento.vertex.push_back(points.at(6));
-        pavimento.vertex.push_back(points.at(5));
-        pavimento.vertex.push_back(points.at(0));
-
-
-    faces.push_back(anteriore);
-    faces.push_back(posteriore);
-    faces.push_back(pavimento);
-    faces.push_back(laterale_sx);
-    faces.push_back(laterale_dx);
-    faces.push_back(tetto_dx);
-    faces.push_back(tetto_sx);
-    
+    buildPoints();
 }
 
 void Mesh::Figure::draw(){
-            int coff_normal=3;
+            int coff_normal=1;
             for(short int i = 0; i < faces.size(); i++)
             {
                 float median[3]={0,0,0};
@@ -71,6 +17,7 @@ void Mesh::Figure::draw(){
                         Face temp= faces.at(i);
                         Point point=temp.getNormal();
                         float* normal=point.getCoords();
+                       // std::cout<<normal[0]<<": "<<normal[1]<<": "<<normal[2]<<std::endl;
                         glNormal3fv(normal);
                         
                         for(short int j = 0; j < temp.vertex.size(); j++){
@@ -87,6 +34,7 @@ void Mesh::Figure::draw(){
 
                 glDisable(GL_LIGHTING);
                     glBegin(GL_LINES);
+                        glColor3f(1,0,0);
                         glVertex3fv(median);
                         glColor3f(0,0,1);
                         glVertex3f(median[0]+normal[0]*coff_normal,median[1]+normal[1]*coff_normal,median[2]+normal[2]*coff_normal);
@@ -97,31 +45,38 @@ void Mesh::Figure::draw(){
 }
 
 
-vector<Mesh::Point> Mesh::Figure::buildPoints(){
-    vector<Point> points;
-    points.push_back(*(new Point(5,5,5)));
-    points.push_back(*(new Point(8,5,5)));
-    points.push_back(*(new Point(8,8,5)));
-    points.push_back(*(new Point(6.5,9.5,5)));
-    points.push_back(*(new Point(5,8,5)));
-    points.push_back(*(new Point(5,5,10)));
-    points.push_back(*(new Point(8,5,10)));
-    points.push_back(*(new Point(8,8,10)));
-    points.push_back(*(new Point(6.5,9.5,10)));
-    points.push_back(*(new Point(5,8,10)));
-    float x=0,y=0,z=0;
-    
-    for(short int i = 0; i < points.size(); i++)
-    {
-        x+=points.at(i).getCoords()[0];
-        y+=points.at(i).getCoords()[1];
-        z+=points.at(i).getCoords()[2];
-    }
-    x/=points.size();
-    y/=points.size();
-    z/=points.size();
-    cout<<"Media x|y|z:"<<x<<"|"<<y<<"|"<<z<<endl;
-    
-    return points;
+void Mesh::Figure::buildPoints(){
+    std::map<int, Point*> mappa;
+    //Load XML description
+        XMLDocument file;
+        file.LoadFile("casa/descr.xml");
+        XMLNode* mesh=file.FirstChildElement("mesh");
+
+        XMLElement* prova = mesh->FirstChildElement( "pointlist" );
+    //Load Points description
+        for(XMLElement* p = prova->FirstChildElement(); p; p=p->NextSiblingElement()){
+            float x,y,z;
+            int id;
+            p->QueryIntAttribute("id",&id);
+            p->QueryFloatAttribute("x",&x);
+            p->QueryFloatAttribute("y",&y);
+            p->QueryFloatAttribute("z",&z);
+            cout<<x<<" "<<y<<" "<<z<<endl;
+            mappa[id] = new Point(x,y,z);
+        }
+        
+    //Build faces
+        for(XMLElement* face=mesh->FirstChildElement("facelist")->FirstChildElement(); face; face=face->NextSiblingElement()){
+            Face current;
+            cout<<"Faccia x\n";
+            for(XMLElement* ref=face->FirstChildElement("ref"); ref; ref=ref->NextSiblingElement()){
+                cout<<"fff\n";
+                int node_id;
+                ref->QueryIntText(&node_id);
+                cout<<node_id<<endl;
+                current.vertex.push_back(*(mappa.at(node_id)));
+            }
+            faces.push_back(current);
+        }
 
 }

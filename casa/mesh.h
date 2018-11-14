@@ -34,7 +34,7 @@ class Mesh::Face{
 class Mesh::Figure{
     private:
         std::vector<Face> faces;
-        std::vector<Point> buildPoints();
+        void buildPoints();
     
     public:
         void draw();

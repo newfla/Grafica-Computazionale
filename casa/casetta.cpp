@@ -24,8 +24,11 @@ using namespace std;
 void redraw(void){
     //CLEAR
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         gluPerspective(150,width/heigth,plane[0], plane[1]);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
 
     //REGOLAZIONE PUNTO DI VISTA

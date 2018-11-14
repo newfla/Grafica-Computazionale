@@ -54,7 +54,7 @@
                     "args": [
                         "-g",
                         "-std=c++11",
-                        "dependencies/tinyxml2.cpp",
+                        "./casa/tinyxml2.cpp",
                         "./casa/casetta.cpp",
                         "./casa/Point.cpp",
                         "./casa/Face.cpp",
@@ -69,7 +69,7 @@
                     "args": [
                         "-g",
                         "-std=c++11",
-                        "dependencies/tinyxml2.cpp",
+                        "./casa/tinyxml2.cpp",
                         "./casa/casetta.cpp",
                         "./casa/Point.cpp",
                         "./casa/Face.cpp",
