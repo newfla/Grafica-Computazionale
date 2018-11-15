@@ -16,3 +16,12 @@ Mesh::Point Mesh::Face::getNormal(){
     }
     return *normal;
 }
+
+Mesh::Face::~Face(){
+    vertex.clear();
+}
+
+void Mesh::Face::forceNormal(){
+    normal=NULL;
+    getNormal();
+}

@@ -31,6 +31,9 @@
         "string_view": "cpp",
         "cinttypes": "cpp",
         "tuple": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "cstdarg": "cpp",
+        "cstddef": "cpp",
+        "cstring": "cpp"
     }
 }

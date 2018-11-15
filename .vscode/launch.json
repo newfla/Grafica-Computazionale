@@ -23,7 +23,7 @@
                 "program": " ${workspaceFolder}/a.out",
             },
             
-            "preLaunchTask": "compileCasa",
+            "preLaunchTask": "compileCurve",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

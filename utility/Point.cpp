@@ -9,3 +9,7 @@ Mesh::Point::Point(float x, float y, float z){
 float* Mesh::Point::getCoords(){
     return &coords[0];
 }
+
+Mesh::Point::~Point(){
+    coords.clear();
+}

@@ -2,7 +2,7 @@
 #include<GL/gl.h>
 #include<GL/glut.h>
 #include<iostream>
-#include"mesh.h"
+#include "../utility/mesh.h"
 #include <math.h>
 using namespace std;
 
@@ -34,8 +34,9 @@ void redraw(void){
     //REGOLAZIONE PUNTO DI VISTA
         glPushMatrix();
             gluLookAt(camera[0],camera[1],
-            camera[2],center[0],center[1],center[2],up_vector[0],up_vector[1],up_vector[2]);       
+            camera[2],center[0],center[1],center[2],up_vector[0],up_vector[1],up_vector[2]);    
             casa.draw();
+            casa.drawNormal();
         glPopMatrix();
     glFlush();
 }
@@ -89,7 +90,9 @@ int main(int argc, char* argv[]){
         glEnable(GL_LIGHT0);
         glEnable(GL_NORMALIZE);
         glShadeModel(GL_FLAT);
-        
+
+    //READ HOUSE FROM FILE
+        casa.buildPoints("casa/descr.xml");
 
     //DISPLAY    
         glutMainLoop();

@@ -15,10 +15,7 @@
                     "args": [
                         "-g",
                         "-std=c++11",
-                        "./crono/cronometro.cpp",
-                        "./crono/Quadrante.cpp",
-                        "./crono/Tasto.cpp",
-                        "./crono/Lancetta.cpp",
+                        "./crono/*.cpp",
                         "-lmingw32",
                         "-lopengl32",
                         "-lglut32",
@@ -29,16 +26,82 @@
                     "args": [
                         "-g",
                         "-std=c++11",
-                        "./crono/cronometro.cpp",
-                        "./crono/Quadrante.cpp",
-                        "./crono/Tasto.cpp",
-                        "./crono/Lancetta.cpp",
+                        "./crono/*.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"
                     ],
                 }
             },
+            {
+                "label": "compileFunzione",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "utility/*.cpp",
+                        "./funzione/*.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g0",
+                        "-Ofast",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "utility/*.cpp",
+                        "./funzione/*.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lglut"
+                    ],
+                }
+            },
+            {
+                "label": "compileCurve",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "./bezier/bezier2.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "utility/*.cpp",
+                        "./bezier/bezier2.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lglut"
+                    ],
+                }
+            },
+
             {
                 "label": "compileCasa",
                 "type": "shell",
@@ -55,10 +118,8 @@
                         "-g",
                         "-std=c++11",
                         "dependencies/tinyxml2.cpp",
-                        "./casa/casetta.cpp",
-                        "./casa/Point.cpp",
-                        "./casa/Face.cpp",
-                        "./casa/Figure.cpp",
+                        "utility/*.cpp",
+                        "./casa/*.cpp",
                         "-lmingw32",
                         "-lopengl32",
                         "-lglut32",
@@ -70,10 +131,8 @@
                         "-g",
                         "-std=c++11",
                         "dependencies/tinyxml2.cpp",
-                        "./casa/casetta.cpp",
-                        "./casa/Point.cpp",
-                        "./casa/Face.cpp",
-                        "./casa/Figure.cpp",
+                        "utility/*.cpp",
+                        "./casa/*.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"
