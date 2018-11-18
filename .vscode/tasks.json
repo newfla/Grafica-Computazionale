@@ -81,7 +81,8 @@
                         "-g",
                         "-std=c++11",
                         "dependencies/tinyxml2.cpp",
-                        "./bezier/bezier2.cpp",
+                        "utility/*.cpp",
+                        "./bezier/bezierX.cpp",
                         "-lmingw32",
                         "-lopengl32",
                         "-lglut32",
@@ -94,7 +95,7 @@
                         "-std=c++11",
                         "dependencies/tinyxml2.cpp",
                         "utility/*.cpp",
-                        "./bezier/bezier2.cpp",
+                        "./bezier/bezierX.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"

@@ -34,6 +34,7 @@
         "utility": "cpp",
         "cstdarg": "cpp",
         "cstddef": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "functional": "cpp"
     }
 }

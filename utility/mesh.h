@@ -13,6 +13,7 @@ namespace Mesh{
     class Point;
     class Face;
     class Figure;
+    class BezierCurve;
 };
 
 class Mesh::Point{
@@ -43,6 +44,20 @@ class Mesh::Figure{
         void drawNormal();
         void addFaces(Mesh::Face face);
         void buildPoints(const char* path);
+};
+
+class Mesh::BezierCurve{
+    public:
+        void addCheckpoint(Point x);
+        void addCheckpoint(float x, float y, float z);
+        void drawCurve();
+        void drawCheckpoints();
+        void modCheckpoint(Point who, Point newer);
+
+    private:
+        float cube=0.02;
+        std::vector<float> checkpoints;
+        bool checkInRange(float val, float cord, short invert);
 };
 
 #endif

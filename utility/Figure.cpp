@@ -14,7 +14,7 @@ void Mesh::Figure::draw(){
                         Face temp= faces.at(i);
                         Point point=temp.getNormal();
                         float* normal=point.getCoords();
-                        std::cout<<normal[0]<<": "<<normal[1]<<": "<<normal[2]<<std::endl;
+                      //  std::cout<<normal[0]<<": "<<normal[1]<<": "<<normal[2]<<std::endl;
                         glNormal3fv(normal);
                         for(short int j = 0; j < temp.vertex.size(); j++)
                             glVertex3fv(temp.vertex.at(j).getCoords());                    
