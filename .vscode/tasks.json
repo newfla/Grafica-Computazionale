@@ -82,7 +82,7 @@
                         "-std=c++11",
                         "dependencies/tinyxml2.cpp",
                         "utility/*.cpp",
-                        "./bezier/bezierX.cpp",
+                        "./bezier/bezier4.cpp",
                         "-lmingw32",
                         "-lopengl32",
                         "-lglut32",
@@ -95,14 +95,47 @@
                         "-std=c++11",
                         "dependencies/tinyxml2.cpp",
                         "utility/*.cpp",
-                        "./bezier/bezierX.cpp",
+                        "./bezier/bezier4.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"
                     ],
                 }
             },
-
+            {
+                "label": "compileNurbs",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "utility/*.cpp",
+                        "./nurbs/nurbsX.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "utility/*.cpp",
+                        "./nurbs/nurbsX.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lglut"
+                    ],
+                }
+            },
             {
                 "label": "compileCasa",
                 "type": "shell",

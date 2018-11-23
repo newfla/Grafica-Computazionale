@@ -3,6 +3,7 @@
 #define _USE_MATH_DEFINES
 #include<GL/gl.h>
 #include<GL/glut.h>
+#include<GL/glu.h>
 #include <string>
 #include<vector>
 #include<math.h>
@@ -14,6 +15,7 @@ namespace Mesh{
     class Face;
     class Figure;
     class BezierCurve;
+    class NurbsCurve;
 };
 
 class Mesh::Point{
@@ -58,6 +60,32 @@ class Mesh::BezierCurve{
         float cube=0.02;
         std::vector<float> checkpoints;
         bool checkInRange(float val, float cord, short invert);
+        int max=0;
+};
+
+class Mesh::NurbsCurve{
+    public:
+        void addCheckpoint(Point x,float w);
+        void addCheckpoint(float x, float y, float z,float w);
+        void modCheckpoint(Point who, Point newer);
+        void modWeight(Point who, float weight);
+        void addKnot(float k);
+        void drawCurve();
+        void drawCheckpoints();
+        void drawHandles();
+        GLUnurbsObj* getNurb();
+        NurbsCurve(int step,int degree);
+
+    private:
+        float cube=0.02;
+        std::vector<float> checkpoints;
+        std::vector<float> knots;
+        GLUnurbsObj* nurbs;
+        int degree=0;
+        static GLvoid printError(GLenum errorCode);
+        void setDegree(int deg);
+        bool checkInRange(float val, float cord, short invert);
+
 };
 
 #endif

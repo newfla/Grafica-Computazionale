@@ -7,7 +7,7 @@
 using namespace Mesh;
 
 //WINDOW PARAM
-    float width=700, heigth=700;
+    float width=500, heigth=500;
 
 //Point vector
     GLfloat cp[4][3] = {{ -4.0, -4.0, 0.0},

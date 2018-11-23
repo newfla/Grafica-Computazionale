@@ -23,12 +23,14 @@ void calculate_cpw(){
     for(int i = 0; i < 4; i++)
     {
         for(int j = 0; j < 3; j++){
-           cpw[i][j]=cp[i][j]/w[i];
+           cpw[i][j]=cp[i][j]*w[i];
            cout<<cpw[i][j]<<endl;
         }
         cpw[i][3]=w[i];
+        cout<<cpw[i][3]<<endl;
+        cout<<"____"<<endl;
     }
-    cout<<"____"<<endl;
+    
 }
 
 
@@ -52,6 +54,7 @@ int main(int argc, char** argv) {
     //CALCULATE CPW
         calculate_cpw();    
 
+glScalef(0.1,0.1,0.1);
     //EVALUATORS
         glMap1f(GL_MAP1_VERTEX_4, 0.0, 1.0, 4, 4, &cpw[0][0]);
         glEnable(GL_MAP1_VERTEX_4);
