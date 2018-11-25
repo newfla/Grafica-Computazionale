@@ -75,6 +75,7 @@ class Mesh::NurbsCurve{
         void drawHandles();
         GLUnurbsObj* getNurb();
         NurbsCurve(int step,int degree);
+        NurbsCurve(const char* jsonPath);
 
     private:
         float cube=0.02;

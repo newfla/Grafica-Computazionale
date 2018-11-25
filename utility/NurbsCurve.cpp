@@ -1,5 +1,8 @@
 #include "mesh.h"
+#include "../dependencies/json.hpp"
+#include<fstream>
 using namespace std;
+using json = nlohmann::json;
 
 void Mesh::NurbsCurve::addCheckpoint(Point x, float w){
     checkpoints.push_back(x.getCoords()[0]*w);
@@ -15,6 +18,11 @@ void Mesh::NurbsCurve::addCheckpoint(Point x, float w){
 }
 
 void Mesh::NurbsCurve::addCheckpoint(float x, float y, float z, float w){
+   /* cout<<x<<endl;
+    cout<<y<<endl;
+    cout<<z<<endl;
+    cout<<w<<endl;
+    cout<<"------"<<endl;*/
     checkpoints.push_back(x*w);
     checkpoints.push_back(y*w);
     checkpoints.push_back(z*w);
@@ -62,6 +70,7 @@ bool Mesh::NurbsCurve::checkInRange(float val, float cord,short invert){
 }
 
 void Mesh::NurbsCurve::addKnot(float k){
+   // cout<<k<<endl<<"--------"<<endl;
     knots.push_back(k);
 }
 
@@ -96,8 +105,6 @@ void Mesh::NurbsCurve::drawHandles(){
 
 }
 
-
-
 GLUnurbsObj* Mesh::NurbsCurve::getNurb(){
     return nurbs;
 }
@@ -119,5 +126,30 @@ Mesh::NurbsCurve::NurbsCurve(int step, int degree){
         gluNurbsProperty(nurbs,GLU_U_STEP,step);
         gluNurbsProperty(nurbs, GLU_SAMPLING_METHOD, GLU_DOMAIN_DISTANCE);
         gluNurbsCallback(nurbs,GLU_ERROR, (_GLUfuncptr)Mesh::NurbsCurve::printError);
+}
+
+Mesh::NurbsCurve::NurbsCurve(const char* jsonPath){
+    //LOAD FILE
+        std::ifstream i(jsonPath);
+        json j;
+        i >> j;
+
+    //STANDARD INIT NURBS
+        nurbs=gluNewNurbsRenderer();
+        setDegree(j["degree"]);
+        gluNurbsProperty(nurbs,GLU_U_STEP,j["discretization"]);
+        gluNurbsProperty(nurbs, GLU_SAMPLING_METHOD, GLU_DOMAIN_DISTANCE);
+
+    //ADD CHECKPOINT
+        vector<float> checks=j["controlPoints"];
+        for(int i = 0; i < checks.size(); i+=4)
+            addCheckpoint(checks.at(i),checks.at(i+1),checks.at(i+2),checks.at(i+3));
+        
+
+    //ADD KNOTS
+        vector<float> knots=j["knots"];
+        for(int i = 0; i < knots.size(); i++)
+           addKnot(knots.at(i));
+        
 }
 

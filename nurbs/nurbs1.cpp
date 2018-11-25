@@ -10,7 +10,7 @@ using namespace Mesh;
     float width=700, heigth=700;
 
 //NURB CURVE
-    NurbsCurve curve(50,2);
+    NurbsCurve curve(50,3);
 
 GLvoid printError(GLenum errorCode){
     const GLubyte* estring;

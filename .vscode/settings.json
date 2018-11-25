@@ -35,6 +35,11 @@
         "cstdarg": "cpp",
         "cstddef": "cpp",
         "cstring": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "memory": "cpp",
+        "numeric": "cpp",
+        "valarray": "cpp"
     }
 }
