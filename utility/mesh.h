@@ -8,6 +8,7 @@
 #include<vector>
 #include<math.h>
 #include <iostream>
+#include <map>
 using namespace std;
 
 namespace Mesh{
@@ -68,6 +69,7 @@ class Mesh::NurbsCurve{
         void addCheckpoint(Point x,float w);
         void addCheckpoint(float x, float y, float z,float w);
         void modCheckpoint(Point who, Point newer);
+        void modUniform(Point who,float angleMod);
         void modWeight(Point who, float weight);
         void addKnot(float k);
         void drawCurve();
@@ -79,6 +81,7 @@ class Mesh::NurbsCurve{
 
     private:
         float cube=0.02;
+        std::map<int,float> angleMap;
         std::vector<float> checkpoints;
         std::vector<float> knots;
         GLUnurbsObj* nurbs;
@@ -86,6 +89,9 @@ class Mesh::NurbsCurve{
         static GLvoid printError(GLenum errorCode);
         void setDegree(int deg);
         bool checkInRange(float val, float cord, short invert);
+        int whoModUniform(Point who,float angleMod);
+        bool modUniformGraphic(int i,float angleMod);
+        void modUniformKnots(int i,float angleMod);
 
 };
 

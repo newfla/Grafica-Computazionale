@@ -18,8 +18,23 @@ using namespace Mesh;
 //LEFT CLICK POSITION
     float* click;
 
+//RADIANS CONVERSION
+   float degrees=180/(3.14*3);
+
+
+float angleMovement(Point old, Point newer){
+    float x=newer.getCoords()[0]-old.getCoords()[0],
+        y=-(newer.getCoords()[1]-old.getCoords()[1]);
+    float temp=atan2f(y,x);
+    temp*=degrees;
+    if(temp<0)
+        temp+=360;
+    return temp;
+}
+
 void redraw(){
     glClear(GL_COLOR_BUFFER_BIT);
+    glLoadIdentity();
     
     for(int i = 0; i < curve.size(); i++)
     {
@@ -53,16 +68,26 @@ void mouseListener(int button, int state, int x, int y){
         float* pos=scaleToScreen(x,y);
         Point who=Point(click[0],click[1],0);
         Point newer=Point(pos[0],pos[1],0);
+        float weight=1;
         
         for(int i = 0; i < curve.size(); i++){
-            if(GLUT_ACTIVE_SHIFT==glutGetModifiers()) {
-                 float weight=10*(newer.getCoords()[0]-who.getCoords()[0]);
-                cout<<weight<<endl;
-                curve.at(i).modWeight(who,weight);
-            }
-            else
-                curve.at(i).modCheckpoint(who,newer);
-        } 
+            switch(glutGetModifiers()){
+                case GLUT_ACTIVE_SHIFT:
+                    weight=8*(newer.getCoords()[0]-who.getCoords()[0]);
+                    //cout<<weight<<endl;
+                    curve.at(i).modWeight(who,weight);
+                    break;
+                
+                case GLUT_ACTIVE_CTRL:
+                    curve.at(i).modUniform(who,angleMovement(who,newer));
+                    break;
+
+                default:
+                    curve.at(i).modCheckpoint(who,newer);
+                    break;
+                
+            } 
+        }
     }
     glutPostRedisplay();
 }

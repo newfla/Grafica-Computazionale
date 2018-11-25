@@ -18,11 +18,6 @@ void Mesh::NurbsCurve::addCheckpoint(Point x, float w){
 }
 
 void Mesh::NurbsCurve::addCheckpoint(float x, float y, float z, float w){
-   /* cout<<x<<endl;
-    cout<<y<<endl;
-    cout<<z<<endl;
-    cout<<w<<endl;
-    cout<<"------"<<endl;*/
     checkpoints.push_back(x*w);
     checkpoints.push_back(y*w);
     checkpoints.push_back(z*w);
@@ -54,9 +49,71 @@ void Mesh::NurbsCurve::modWeight(Point who, float weight){
                 break;
             else if(j==2){
                 checkpoints.at(i+3)+=weight;
+               // cout<< checkpoints.at(i+3)<<endl<<"-----"<<endl;
             }
         }
     }
+}
+
+void Mesh::NurbsCurve::modUniform(Point who,float angleMod){
+    int i=whoModUniform(who,angleMod);
+    if(i!=-1){
+        if(modUniformGraphic(i,angleMod))
+            modUniformKnots(i/4,angleMod);
+    }
+}
+
+bool Mesh::NurbsCurve::modUniformGraphic(int i,float angleMod){
+        float angle=0, back=0;
+        if(angleMap.find(i)!=angleMap.end())
+            angle=angleMap[i];
+        back=angle;
+        angle+=angleMod;
+        angle=(int)angle%360;
+        if(angle>=90 && angle<=270){
+            angleMap[i]=back;
+            return false;
+        }
+        angleMap[i]=angle;
+        return true;
+}
+
+void Mesh::NurbsCurve::modUniformKnots(int i,float angleMod){
+    if(angleMod<=90)
+        for(short j =i+degree-1; j>=i+degree/2; j--)
+    {
+        cout<<"Old: "<<knots[j]<<endl;
+        knots[j]+= (knots[j+1]-knots[j])*(angleMod/90.);
+        cout<<"New: "<<knots[j]<<endl<<"-----\n";
+    }
+    else{
+        for(short j=i+degree/2; j>=i; j--)
+        {
+            cout<<"Old: "<<knots[j]<<endl;
+            knots[j]-= (knots[j]-knots[j-1])*(angleMod/360.);
+            cout<<"New: "<<knots[j]<<endl<<"-----\n";
+        }
+    }
+}
+
+int Mesh::NurbsCurve::whoModUniform(Point who,float angleMod){
+    bool founded=false;
+    int i=0;
+    for(i = 0; i < checkpoints.size(); i+=4)
+    {
+        for(short j = 0; j < 4; j++)
+        {
+            if(!checkInRange(who.getCoords()[j],checkpoints.at(i+j),j))
+                break;
+            else if(j==2){
+                founded=true;
+                break;
+            }
+        }
+        if(founded)
+           return i;
+    }
+    return -1;
 }
 
 bool Mesh::NurbsCurve::checkInRange(float val, float cord,short invert){
@@ -70,7 +127,6 @@ bool Mesh::NurbsCurve::checkInRange(float val, float cord,short invert){
 }
 
 void Mesh::NurbsCurve::addKnot(float k){
-   // cout<<k<<endl<<"--------"<<endl;
     knots.push_back(k);
 }
 
@@ -95,12 +151,31 @@ void Mesh::NurbsCurve::drawCheckpoints(){
 }
 
 void Mesh::NurbsCurve::drawHandles(){
-    for(int i = 0; i < checkpoints.size()/4; i++){
-        int j=4*i;
-        glBegin(GL_LINES);
-            glVertex3f(checkpoints.at(j)-(3*cube*checkpoints.at(j+3)), checkpoints.at(j+1), checkpoints.at(j+2));
-            glVertex3f(checkpoints.at(j)+(3*cube*checkpoints.at(j+3)), checkpoints.at(j+1), checkpoints.at(j+2));
-        glEnd();
+    for(int i = 0; i < checkpoints.size(); i+=4){
+        //COLOR SETTING
+            if(checkpoints.at(i+3)<0)
+                glColor3f(1,0,0);
+            else
+                glColor3f(0,1,0);
+                
+        //CHECK HANDLE ROTATION 1        
+            if(angleMap.find(i)!=angleMap.end()){
+                cout<<"angolo: "<<angleMap[i]<<endl;
+                glPushMatrix();
+                    glTranslatef(checkpoints.at(i),checkpoints.at(i+1),0);
+                    glRotatef(angleMap[i],0,0,1);
+                    glTranslatef(-checkpoints.at(i),-checkpoints.at(i+1),0);
+            }
+
+        //HANDLE DRAW
+            glBegin(GL_LINES);
+                glVertex3f(checkpoints.at(i)-(3*cube*checkpoints.at(i+3)), checkpoints.at(i+1), checkpoints.at(i+2));
+                glVertex3f(checkpoints.at(i)+(3*cube*checkpoints.at(i+3)), checkpoints.at(i+1), checkpoints.at(i+2));
+            glEnd();
+
+        //CHECK HANDLE ROTATION 2   
+            if(angleMap.find(i)!=angleMap.end())
+                glPopMatrix();
     }
 
 }
@@ -117,7 +192,7 @@ void Mesh::NurbsCurve::setDegree(int deg){
 GLvoid Mesh::NurbsCurve::printError(GLenum errorCode){
     const GLubyte* estring;
     estring=gluErrorString(errorCode);
-    cerr<<estring<<endl;
+   // cerr<<estring<<endl;
 }
 
 Mesh::NurbsCurve::NurbsCurve(int step, int degree){

@@ -121,7 +121,7 @@
                         "dependencies/tinyxml2.cpp",
                         "dependencies/json.hpp",
                         "utility/*.cpp",
-                        "./nurbs/nurbs3.cpp",
+                        "./nurbs/nurbsX.cpp",
                         "-lmingw32",
                         "-lopengl32",
                         "-lglut32",

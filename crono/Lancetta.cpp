@@ -1,7 +1,7 @@
 #include "crono.h"
 
 void Crono::Lancetta::draw() const{
-    //DRAW lLANCETTA
+    //DRAW LANCETTA
         glPushMatrix();
             glRotatef(-rotate[0],0.0,0.0,1.0);
             glBegin(GL_LINES);
