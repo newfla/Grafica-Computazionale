@@ -17,6 +17,7 @@ namespace Mesh{
     class Figure;
     class BezierCurve;
     class NurbsCurve;
+    class BezierSurface;
 };
 
 class Mesh::Point{
@@ -24,6 +25,7 @@ class Mesh::Point{
         std::vector<float> coords;
     public:
         Point (float x, float y, float z);
+        Point (float x, float y, float z, float w);
         float* getCoords();
         ~Point();
         
@@ -64,6 +66,22 @@ class Mesh::BezierCurve{
         int max=0;
 };
 
+class Mesh::BezierSurface{
+    public:
+        void addCheckpoint(Point x,float w);
+        void addCheckpoint(float x, float y, float z, float w);
+        void drawCurve();
+        void testDrawCurve();
+        BezierSurface(GLenum mode,std::vector<float> order, std::vector<float> min, std::vector<float> max);
+    
+    private:
+        GLenum mode;
+        std::vector<float> checkpoints;
+        std::vector<float> order, min,max;
+        Point* center;
+        void buildCenter();
+};
+
 class Mesh::NurbsCurve{
     public:
         void addCheckpoint(Point x,float w);
@@ -92,7 +110,8 @@ class Mesh::NurbsCurve{
         int whoModUniform(Point who,float angleMod);
         bool modUniformGraphic(int i,float angleMod);
         void modUniformKnots(int i,float angleMod);
-
 };
+
+
 
 #endif

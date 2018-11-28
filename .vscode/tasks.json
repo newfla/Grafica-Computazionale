@@ -106,6 +106,45 @@
                     ],
                 }
             },
+
+            {
+                "label": "compileBezierSurface",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./bezier_surface/bsurface3.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./bezier_surface/bsurface1.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lglut"
+                    ],
+                }
+            },
+
+
             {
                 "label": "compileNurbs",
                 "command": "g++",

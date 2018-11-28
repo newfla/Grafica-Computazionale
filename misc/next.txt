@@ -1,0 +1,60 @@
+
+class Mesh::NurbsSurface{
+     public:
+        void addCheckpoint(Point x,float w);
+        void addCheckpoint(float x, float y, float z, float w);
+        void addKnot(float k);
+        void addUKnot(float k);
+        void addVKnot(float k);
+        void drawCurve();
+        NurbsSurface(GLenum displayMode, int uStep, int vStep, GLfloat samplingMethod);
+    
+    private:
+        GLUnurbsObj* nurbs;
+        std::vector<float> checkpoints;
+        std::vector<float> uKnots;
+        std::vector<float> vKnots;
+};
+
+
+
+#include"mesh.h"
+
+Mesh::NurbsSurface::NurbsSurface(GLenum displayMode, int uStep, int vStep, GLfloat samplingMethod){
+    nurbs=gluNewNurbsRenderer();
+    gluNurbsProperty(nurbs,GLU_U_STEP,uStep);
+    gluNurbsProperty(nurbs,GLU_V_STEP,vStep);
+    gluNurbsProperty(nurbs,GLU_DISPLAY_MODE,displayMode);
+}
+
+void Mesh::NurbsSurface::addCheckpoint(Point x, float w){
+    checkpoints.push_back(x.getCoords()[0]*w);
+    checkpoints.push_back(x.getCoords()[1]*w);
+    checkpoints.push_back(x.getCoords()[2]*w);
+    checkpoints.push_back(w);
+
+}
+
+void Mesh::NurbsSurface::addCheckpoint(float x, float y, float z, float w){
+    checkpoints.push_back(x*w);
+    checkpoints.push_back(y*w);
+    checkpoints.push_back(z*w);
+    checkpoints.push_back(w);
+}
+
+void Mesh::NurbsSurface::addUKnot(float k){
+    uKnots.push_back(k);
+}
+
+void Mesh::NurbsSurface::addVKnot(float k){
+    vKnots.push_back(k);
+}
+
+void Mesh::NurbsSurface::addKnot(float k){
+    addUKnot(k);
+    addVKnot(k);
+}
+
+void Mesh::NurbsSurface::drawCurve(){
+    
+}

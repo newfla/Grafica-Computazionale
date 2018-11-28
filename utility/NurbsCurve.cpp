@@ -6,7 +6,7 @@ using json = nlohmann::json;
 
 void Mesh::NurbsCurve::addCheckpoint(Point x, float w){
     checkpoints.push_back(x.getCoords()[0]*w);
-    checkpoints.push_back(-x.getCoords()[1]*w);
+    checkpoints.push_back(x.getCoords()[1]*w);
     checkpoints.push_back(x.getCoords()[2]*w);
     checkpoints.push_back(w);
 
