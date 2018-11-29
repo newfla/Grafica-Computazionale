@@ -85,7 +85,7 @@
                         "dependencies/tinyxml2.cpp",
                         "dependencies/json.hpp",
                         "utility/*.cpp",
-                        "./bezier/bezier4.cpp",
+                        "./bezier/bezierX.cpp",
                         "-lmingw32",
                         "-lopengl32",
                         "-lglut32",
@@ -137,6 +137,80 @@
                         "dependencies/json.hpp",
                         "utility/*.cpp",
                         "./bezier_surface/bsurface1.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lglut"
+                    ],
+                }
+            },
+
+            {
+                "label": "compileNurbsSurface",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./nurbs_surface/nsurface1.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./bezier_surface/bsurface1.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lglut"
+                    ],
+                }
+            },
+
+            {
+                "label": "compileFigure",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./figure/figure1.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./figure/figure1.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"

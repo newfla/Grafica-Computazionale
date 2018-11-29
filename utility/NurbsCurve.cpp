@@ -6,7 +6,7 @@ using json = nlohmann::json;
 
 void Mesh::NurbsCurve::addCheckpoint(Point x, float w){
     checkpoints.push_back(x.getCoords()[0]*w);
-    checkpoints.push_back(x.getCoords()[1]*w);
+    checkpoints.push_back(-x.getCoords()[1]*w);
     checkpoints.push_back(x.getCoords()[2]*w);
     checkpoints.push_back(w);
 
@@ -192,7 +192,7 @@ void Mesh::NurbsCurve::setDegree(int deg){
 GLvoid Mesh::NurbsCurve::printError(GLenum errorCode){
     const GLubyte* estring;
     estring=gluErrorString(errorCode);
-   // cerr<<estring<<endl;
+    cerr<<estring<<endl;
 }
 
 Mesh::NurbsCurve::NurbsCurve(int step, int degree){

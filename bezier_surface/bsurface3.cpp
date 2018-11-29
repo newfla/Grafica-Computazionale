@@ -50,7 +50,6 @@ int main(int argc, char** argv) {
         glEnable(GL_AUTO_NORMAL);
         glShadeModel(GL_FLAT);
 
-
     //PUSH CONTROL POINTS
         surface.addCheckpoint(0,0,0,1);
         surface.addCheckpoint(1, 0, .5,.5);

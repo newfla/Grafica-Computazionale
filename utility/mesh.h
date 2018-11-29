@@ -18,6 +18,8 @@ namespace Mesh{
     class BezierCurve;
     class NurbsCurve;
     class BezierSurface;
+    class NurbsSurface;
+    class GluSolidFigure;
 };
 
 class Mesh::Point{
@@ -84,6 +86,9 @@ class Mesh::BezierSurface{
 
 class Mesh::NurbsCurve{
     public:
+        std::vector<float> checkpoints;
+        std::vector<float> knots;
+        int degree=0;
         void addCheckpoint(Point x,float w);
         void addCheckpoint(float x, float y, float z,float w);
         void modCheckpoint(Point who, Point newer);
@@ -96,15 +101,12 @@ class Mesh::NurbsCurve{
         GLUnurbsObj* getNurb();
         NurbsCurve(int step,int degree);
         NurbsCurve(const char* jsonPath);
+        static GLvoid printError(GLenum errorCode);
 
     private:
         float cube=0.02;
         std::map<int,float> angleMap;
-        std::vector<float> checkpoints;
-        std::vector<float> knots;
         GLUnurbsObj* nurbs;
-        int degree=0;
-        static GLvoid printError(GLenum errorCode);
         void setDegree(int deg);
         bool checkInRange(float val, float cord, short invert);
         int whoModUniform(Point who,float angleMod);
@@ -112,6 +114,44 @@ class Mesh::NurbsCurve{
         void modUniformKnots(int i,float angleMod);
 };
 
+class Mesh::NurbsSurface{
+     public:
+        void addCheckpoint(Point x,float w);
+        void addCheckpoint(float x, float y, float z, float w);
+        void addKnot(float k);
+        void addUKnot(float k);
+        void addVKnot(float k);
+        void addTrimPwl2f(vector<float> trim);
+        void addTrimCurve2f(vector<float> trim);
+        void drawCurve();
+        NurbsSurface(GLenum displayMode, int uStep, int vStep, GLfloat samplingMethod, int uOrder, int vOrder);
+    
+    private:
+        GLUnurbsObj* nurbs;
+        int order[2]={0,0};
+        std::vector<float> checkpoints;
+        std::vector<float> uKnots;
+        std::vector<float> vKnots;
+        std::vector<std::vector<float>> trimsPwl;
+        std::vector<std::vector<float>> trimsCurve;
+};
+
+class Mesh::GluSolidFigure{
+    private:
+        GLenum drawStyle;
+        GLenum orientation;
+        GLenum normals;
+        GLUquadric* quad;
+        vector<float> translate;
+
+    public:
+        GluSolidFigure(GLenum drawStyle, GLenum orientation, GLenum normals);
+        void drawSphere(float radius, float slices, float stacks);
+        void drawCylinder(float baseRadius, float topRadius, float height, int slices, int stacks);
+        void drawDisk (float innerRadius,float outerRadius, int slices, int rings);
+        void drawPartialDisk (float innerRadius, float outerRadius, int slices, int rings, float startAngle, float sweepAngle);
+
+};
 
 
 #endif

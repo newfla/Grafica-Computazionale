@@ -58,7 +58,7 @@ void mouseListener(int button, int state, int x, int y){
     if(button==GLUT_RIGHT_BUTTON && state==0){
         float* pos=scaleToScreen(x,y);
         delete last;
-        last=new Point(pos[0],pos[1],0);
+        last=new Point(pos[0],-pos[1],0);
         curve.back().addCheckpoint(*last,1);
     }
     else if (button==GLUT_LEFT_BUTTON && state==0){
