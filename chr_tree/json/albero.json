@@ -1,0 +1,35 @@
+{
+    "tronco":{
+        "radius":0.5,
+        "height":1,
+        "slices":100,
+        "stacks":100,
+        "color":[
+            0.32,
+            0.13,
+            0
+        ]
+    },
+    "cono":{
+        "tot":5 ,
+        "radius":1.85,
+        "height": 7,
+        "slices":100,
+        "stacks":100,
+        "colorPrimary":[
+            0.03,
+            0.32,
+            0.02
+        ],
+        "colorLight":[
+            0.24,
+            0.49,
+            0.2
+        ],
+        "colorDark":[
+            0,
+            0.16,
+            0
+        ]
+    }
+}

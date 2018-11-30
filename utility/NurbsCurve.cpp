@@ -6,7 +6,7 @@ using json = nlohmann::json;
 
 void Mesh::NurbsCurve::addCheckpoint(Point x, float w){
     checkpoints.push_back(x.getCoords()[0]*w);
-    checkpoints.push_back(-x.getCoords()[1]*w);
+    checkpoints.push_back(x.getCoords()[1]*w);
     checkpoints.push_back(x.getCoords()[2]*w);
     checkpoints.push_back(w);
 
@@ -133,7 +133,7 @@ void Mesh::NurbsCurve::addKnot(float k){
 
 void Mesh::NurbsCurve::drawCurve(){
     gluBeginCurve(nurbs);
-        glColor3f(0,0,1);
+       // glColor3f(0,0,1);
         gluNurbsCurve(nurbs,knots.size(),&knots[0],4,&checkpoints[0],degree,GL_MAP1_VERTEX_4);
     gluEndCurve(nurbs);
 

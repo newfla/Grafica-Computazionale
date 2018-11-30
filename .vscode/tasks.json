@@ -99,7 +99,7 @@
                         "dependencies/tinyxml2.cpp",
                         "dependencies/json.hpp",
                         "utility/*.cpp",
-                        "./bezier/bezier4.cpp",
+                        "./bezier/bezierX.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"
@@ -136,7 +136,7 @@
                         "dependencies/tinyxml2.cpp",
                         "dependencies/json.hpp",
                         "utility/*.cpp",
-                        "./bezier_surface/bsurface1.cpp",
+                        "./bezier_surface/bsurface3.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"
@@ -173,7 +173,7 @@
                         "dependencies/tinyxml2.cpp",
                         "dependencies/json.hpp",
                         "utility/*.cpp",
-                        "./bezier_surface/bsurface1.cpp",
+                        "./nurbs_surface/nsurface1.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"
@@ -255,6 +255,44 @@
                     ],
                 }
             },
+
+            {
+                "label": "compileTree",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./chr_tree/*.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./chr_tree/*.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lglut"
+                    ],
+                }
+            },
+
             {
                 "label": "compileCasa",
                 "type": "shell",

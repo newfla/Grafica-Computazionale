@@ -125,6 +125,8 @@ class Mesh::NurbsSurface{
         void addTrimCurve2f(vector<float> trim);
         void drawCurve();
         NurbsSurface(GLenum displayMode, int uStep, int vStep, GLfloat samplingMethod, int uOrder, int vOrder);
+        NurbsSurface();
+        void buildFromFile(const char* path);
     
     private:
         GLUnurbsObj* nurbs;

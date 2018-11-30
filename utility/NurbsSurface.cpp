@@ -1,4 +1,7 @@
 #include"mesh.h"
+#include "../dependencies/json.hpp"
+#include<fstream>
+using json = nlohmann::json;
 
 Mesh::NurbsSurface::NurbsSurface(GLenum displayMode, int uStep, int vStep, GLfloat samplingMethod,int uOrder, int vOrder){
     nurbs=gluNewNurbsRenderer();
@@ -13,6 +16,38 @@ Mesh::NurbsSurface::NurbsSurface(GLenum displayMode, int uStep, int vStep, GLflo
     order[0]=uOrder;
     order[1]=vOrder;
     gluNurbsCallback(nurbs,GLU_ERROR, (_GLUfuncptr)Mesh::NurbsCurve::printError);
+}
+
+Mesh::NurbsSurface::NurbsSurface(){
+    nurbs=gluNewNurbsRenderer();
+    gluNurbsCallback(nurbs,GLU_ERROR, (_GLUfuncptr)Mesh::NurbsCurve::printError);
+    glEnable(GL_AUTO_NORMAL);
+    order[0]=1;
+    order[1]=1;
+}
+
+void Mesh::NurbsSurface::buildFromFile(const char* path){
+    //LOAD FILE
+        std::ifstream i(path);
+        json j;
+        i >> j;
+
+    //OTHER PARAMS    
+    gluNurbsProperty(nurbs,GLU_U_STEP,j["uStep"]);
+    gluNurbsProperty(nurbs,GLU_V_STEP,j["vStep"]);
+    gluNurbsProperty(nurbs,GLU_DISPLAY_MODE,GL_FILL);
+    order[0]+=(int)j["degree"];
+    order[1]+=(int)j["degree"];
+
+    //CONTROL POINTS
+    vector<float> checks=j["controlPoints"];
+        for(int i = 0; i < checks.size(); i+=4)
+            addCheckpoint(checks.at(i),checks.at(i+1),checks.at(i+2),checks.at(i+3));
+
+    //ADD KNOTS
+        vector<float> knots=j["knots"];
+        for(int i = 0; i < knots.size(); i++)
+           addKnot(knots.at(i));
 }
 
 void Mesh::NurbsSurface::addCheckpoint(Point x, float w){

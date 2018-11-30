@@ -135,8 +135,8 @@ int main(int argc, char** argv) {
         vector<float>pwl1={0.3,0.3,0.3,0.7,0.7,0.7,0.7,0.3,0.3,0.3};
         vector<float>curveTrim={0.3,0.5,0.3,0.8,0.6,0.8,0.6,0.5,0.6, 0.2,0.3, 0.2,0.3, 0.5};
         surface->addTrimPwl2f(pwl);
-        //surface->addTrimPwl2f(pwl1);
-        surface->addTrimCurve2f(curveTrim);
+        surface->addTrimPwl2f(pwl1);
+      // surface->addTrimCurve2f(curveTrim);
 
     glutMainLoop();
     return 0;
