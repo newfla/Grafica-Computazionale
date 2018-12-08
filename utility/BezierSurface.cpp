@@ -17,10 +17,6 @@ void Mesh::BezierSurface::addCheckpoint(float x, float y, float z,float w){
 }
 
 void Mesh::BezierSurface::drawCurve(){
-    if(mode==GL_FILL){
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-    }
     glMap2f(GL_MAP2_VERTEX_4, min[0], max[0], 4, order[0],
             min[1], max[1], 16, order[1], &checkpoints[0]);
     glEnable(GL_MAP2_VERTEX_4);

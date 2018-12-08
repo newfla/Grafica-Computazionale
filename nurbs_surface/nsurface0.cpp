@@ -12,7 +12,7 @@ using namespace std;
 //WINDOW PARAM
     float width=700, heigth=700;
 
-//BEZIER CURVE
+//NURBS SURFACE
     NurbsSurface* surface;
 
 //CAMERA PARAM

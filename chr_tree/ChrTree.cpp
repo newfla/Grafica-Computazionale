@@ -73,7 +73,6 @@ void Tree::ChrTree::draw() const{
     float spostamento=0;
         for(int i = 0; i < (int)paramCono[0]; i++)
         {
-                //int x=(int)ceil(i/2.);
                 glColor3fv(&(color[2])[0]);
                 glPushMatrix();
                     glTranslatef(0,spostamento,0);
@@ -87,12 +86,12 @@ void Tree::ChrTree::draw() const{
                 {
                     glPushMatrix();
                         glRotatef(j-30,0,1,0);
-                        palline[i%2==0].draw(paramCono[1]-spostamento/2,spostamento);
+                        palline[i%palline.size()==0].draw(paramCono[1]-spostamento/2,spostamento);
                     glPopMatrix();
 
                     glPushMatrix();
                         glRotatef(j-15.,0,1,0);
-                            palline[i+1%2==0].draw(paramCono[1]-spostamento/2,spostamento);
+                            palline[i+1%palline.size()==0].draw(paramCono[1]-spostamento/2,spostamento);
                     glPopMatrix();  
                 }
                 spostamento+=0.4;

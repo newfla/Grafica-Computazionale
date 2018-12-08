@@ -1,27 +1,46 @@
 #define _USE_MATH_DEFINES
-
-#include "tree.h"
-using namespace Mesh;
+#include<math.h>
+#include<GL/gl.h>
+#include<GL/glut.h>
+#include<GL/glu.h>
+#include <string>
+#include<vector>
+#include<math.h>
+#include <iostream>
+#include <map>
 using namespace std;
-using namespace Tree;
 
 //WINDOW PARAM
     float width=700, heigth=700;
 
-//CHRISTMAS ITEMS
-    Star stella;
-    ChrTree albero;
-    GluSolidFigure* pavimento;
-    vector<Decor>decors;
-    vector<Gift> gifts;
-
 //CAMERA PARAM
     double center[3]={0,0,0};
-    double camera[3]={-0.348782,1.31176,-4.98782};
+    float camera[3]={0.348782,1.31176,4.98782};
     double up_vector[3]={0,1,0};
-    double angle[2]={-94,1.31176};
+    double angle[4]={-94,1.31176,0,0};
     float plane[2]={1,20};
     double dist=camera[2]-center[2];
+
+void directionalListener(int key, int x, int y){
+    switch(key){
+        case GLUT_KEY_UP:
+            angle[3]-=2;
+            break;
+
+        case GLUT_KEY_DOWN:
+        angle[3]+=2;
+            break;
+
+        case GLUT_KEY_LEFT:
+            angle[2]-=2;
+            break;
+
+        case GLUT_KEY_RIGHT:
+            angle[2]+=2;
+            break;
+    }
+    glutPostRedisplay();
+}
 
 void keyboardListener(unsigned char key, int x, int y){
     switch (key){
@@ -62,6 +81,10 @@ void keyboardListener(unsigned char key, int x, int y){
     cout<<"angl1: "<<angle[1]<<endl;
     cout<<"camera0 :"<<camera[0]<<endl;
     cout<<"angl0: "<<angle[0]<<endl<<"-------------"<<endl;*/
+
+    float light2dir[4]={camera[0],camera[1],camera[2],0};
+    glLightfv(GL_LIGHT2,GL_POSITION,light2dir);
+
     glutPostRedisplay();
 }
 
@@ -76,30 +99,24 @@ void redraw(){
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    glLightfv(GL_LIGHT1,GL_POSITION,new float[4]{1,1,1,1});
+
     gluLookAt(camera[0],camera[1],
            camera[2],center[0],center[1],center[2],up_vector[0],up_vector[1],up_vector[2]);
 
-    glScalef(1.2,1.2,1.2);
-    
-    //ALBERO + STELLA + PALLINE
-        albero.draw();
+        float light2dir[4]={camera[0],camera[1],camera[2],0};
+        glLightfv(GL_LIGHT2,GL_POSITION,light2dir);
 
-    //DONI
-    for(int i = 0; i < gifts.size(); i++)
-    {
+        glRotatef(angle[2],0,1,0);
+        glRotatef(angle[3],1,0,0);
+
+        //Aggiungiamo le due sfere intersecate
+            glutSolidSphere(0.5,50,50);
+        
         glPushMatrix();
-            glRotatef(i*360/gifts.size(),0,1,0);
-                gifts[i].draw(-1,albero.getTroncoHeight());
+            glTranslatef(0.35,0.35,0.25);
+                glutSolidSphere(0.5,50,50);
         glPopMatrix();
-    }
-
-    //PAVIMENTO
-    glPushMatrix();
-        glColor3f(0,0.19,0.05);
-        glTranslatef(0,-(albero.getTroncoHeight()+0.007),0);
-        glRotatef(270,1,0,0);
-            pavimento->drawDisk(0,3,50,50);
-    glPopMatrix();
 
     glFlush();
 }
@@ -111,24 +128,20 @@ int main(int argc, char** argv) {
         glutInitDisplayMode(GLUT_RGB| GLUT_DEPTH);
         glutInitWindowPosition(300,100);
         glutInitWindowSize(width,heigth);
-        glutCreateWindow("Christmas_Tree");
+        glutCreateWindow("Prova_Luce");
         glutKeyboardFunc(keyboardListener);
+        glutSpecialFunc(directionalListener);
         glutDisplayFunc(redraw);
 
     //GL INIT
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-        glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_LIGHT1);
+        glEnable(GL_LIGHT2);
 
-    //INIT CHRISTMAS STAR
-        pavimento=new GluSolidFigure(GLU_FILL,GLU_OUTSIDE,GLU_FLAT);
-        stella.buildFromFile("chr_tree/json/star.json");
-        decors=Decor::buildDecorsFromFile("chr_tree/json/decor.json");
-        gifts=Gift::buildGiftsFromFile("chr_tree/json/gift.json");
-        albero.buildTreeFromFile("chr_tree/json/albero.json");
-        albero.addStar(stella);
-        albero.addDecor(decors);
+    //GL LIGHT COLOR INIT
+        glLightfv(GL_LIGHT1,GL_DIFFUSE,new float[3]{1,1,1});
+        glLightfv(GL_LIGHT2,GL_DIFFUSE,new float[3]{1,0,0});
 
     glutMainLoop();
     return 0;

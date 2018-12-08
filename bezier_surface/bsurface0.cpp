@@ -47,6 +47,8 @@ int main(int argc, char** argv) {
         glutDisplayFunc(redraw);
 
     //GL INIT
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
         glEnable(GL_DEPTH_TEST);
         glShadeModel(GL_FLAT);
         glEnable(GL_AUTO_NORMAL);

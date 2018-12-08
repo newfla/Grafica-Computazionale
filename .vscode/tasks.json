@@ -144,6 +144,78 @@
                 }
             },
 
+
+            {
+                "label": "compileStanza",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./stanza/*.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./stanza/*.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lglut"
+                    ],
+                }
+            },
+
+
+
+            {
+                "label": "compileLuce",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "./luce/luce0.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "./luce/luce1.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lglut"
+                    ],
+                }
+            },
+
+
             {
                 "label": "compileNurbsSurface",
                 "command": "g++",
@@ -159,7 +231,7 @@
                         "dependencies/tinyxml2.cpp",
                         "dependencies/json.hpp",
                         "utility/*.cpp",
-                        "./nurbs_surface/nsurface1.cpp",
+                        "./nurbs_surface/nsurface0.cpp",
                         "-lmingw32",
                         "-lopengl32",
                         "-lglut32",
@@ -173,7 +245,7 @@
                         "dependencies/tinyxml2.cpp",
                         "dependencies/json.hpp",
                         "utility/*.cpp",
-                        "./nurbs_surface/nsurface1.cpp",
+                        "./nurbs_surface/nsurface0.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"
