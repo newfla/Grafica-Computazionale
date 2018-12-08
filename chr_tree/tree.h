@@ -49,6 +49,7 @@ class Tree::ChrTree{
         void addStar(Tree::Star stella);
         void addDecor(vector<Tree::Decor> decor);
         float getTroncoHeight();
+        static void resetMaterial();
 
     private:
         Tree::Star stella;

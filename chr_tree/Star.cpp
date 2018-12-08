@@ -30,12 +30,24 @@ void Tree::Star::buildFromFile(const char* path){
 
 void Tree::Star::draw() const{
     //SET COLOR FOR ALL SPIKES
-        glColor3fv(&color[0]);
-    
+       // glColor3fv(&color[0]);
+       ChrTree::resetMaterial();
+       glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&color[0]);
+
     //DRAW ALL SPIKES
             float degree=360./(float)tot;
         glPushMatrix();
             glTranslatef(0,3.*height/7. ,-0.2);
+            glPushMatrix();
+                glRotatef(180,1,0,0);
+                    glLightfv(GL_LIGHT2,GL_POSITION, new float[4]{0,height,-radius,0});
+                    glLightfv(GL_LIGHT3,GL_POSITION, new float[4]{0,height/2,-radius,0});
+                    glLightfv(GL_LIGHT4,GL_POSITION, new float[4]{0,height,-radius,0});
+                    glLightfv(GL_LIGHT5,GL_POSITION, new float[4]{0,height/2,-radius,0});
+                    glLightfv(GL_LIGHT6,GL_POSITION, new float[4]{0,height,-radius,0});
+                    glLightfv(GL_LIGHT7,GL_POSITION, new float[4]{0,height/2,-radius,0});
+            glPopMatrix();
+            
             glRotatef(90,1,0,0);
             glScalef(scale[0],scale[1],scale[2]);    
                 for(int i = 0; i <tot; i++)
@@ -46,5 +58,6 @@ void Tree::Star::draw() const{
                     glPopMatrix();
                 }
         glPopMatrix();
+
 }
 

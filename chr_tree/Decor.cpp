@@ -13,7 +13,11 @@ Tree::Decor::Decor(float radius, int slices, int stacks, vector<float>color, vec
 
 void Tree::Decor::draw(float x, float y) const{
     //SET COLOR
-        glColor3fv(&color[0]);
+        //glColor3fv(&color[0]);
+        ChrTree::resetMaterial();
+        glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,128);    
+        glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&color[0]);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,new float[4]{1,1,1,1});
         
     //DRAW DECOR
         glPushMatrix();

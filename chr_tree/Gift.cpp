@@ -53,14 +53,18 @@ void Tree::Gift::draw(float x, float y) const{
             glScalef(scale[0],scale[1],scale[2]);    
             
                 //DRAW RIBBON
-                glColor3fv(&colorRibbon[0]);
+                ChrTree::resetMaterial();
+                glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&colorRibbon[0]);
+                //glColor3fv(&colorRibbon[0]);
                 glPushMatrix();
                     glTranslatef(0,0,(double)side/2+0.00000000000000002);
                     glScalef(0.05,0.05,0.05);
                     ribbon->drawCurve();
                 glPopMatrix();
                 //DRAW BOX
-                glColor3fv(&colorBox[0]);
+                 ChrTree::resetMaterial();
+                glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&colorBox[0]);
+               // glColor3fv(&colorBox[0]);
                 glutSolidCube(side);
         glPopMatrix();
 }

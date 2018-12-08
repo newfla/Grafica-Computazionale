@@ -22,6 +22,7 @@ using namespace Tree;
     double angle[2]={-94,1.31176};
     float plane[2]={1,20};
     double dist=camera[2]-center[2];
+    bool light=true;
 
 void keyboardListener(unsigned char key, int x, int y){
     switch (key){
@@ -44,6 +45,10 @@ void keyboardListener(unsigned char key, int x, int y){
         case 'w':
             angle[1]-=2;
             break;
+
+        default:
+            exit(0);
+
     }
     //Rotazione intorno all'oggetto;
     camera[0]=center[0]+(dist*cos(angle[0]*((double)M_PI/180.0)));
@@ -57,12 +62,33 @@ void keyboardListener(unsigned char key, int x, int y){
     if(angle[1]!=0)
         camera[1]=center[1]+(dist*sin(angle[1]*((double)M_PI/180.0)));
 
-    /*cout<<"camera2: "<<camera[2]<<endl;
-    cout<<"camera1 :"<<camera[1]<<endl;
-    cout<<"angl1: "<<angle[1]<<endl;
-    cout<<"camera0 :"<<camera[0]<<endl;
-    cout<<"angl0: "<<angle[0]<<endl<<"-------------"<<endl;*/
     glutPostRedisplay();
+}
+
+void lightSwitch(int value){
+    if(value==0){
+        glEnable(GL_LIGHT2);
+        glEnable(GL_LIGHT3);
+
+        glDisable(GL_LIGHT6);
+        glDisable(GL_LIGHT7);
+    }
+    else if(value==1){
+        glEnable(GL_LIGHT4);
+        glEnable(GL_LIGHT5);
+
+        glDisable(GL_LIGHT2);
+        glDisable(GL_LIGHT3);
+    }
+    else{
+        glEnable(GL_LIGHT6);
+        glEnable(GL_LIGHT7);
+
+        glDisable(GL_LIGHT4);
+        glDisable(GL_LIGHT5);
+    }
+    glutPostRedisplay();
+    glutTimerFunc(1000,lightSwitch,(value+1)%3);
 }
 
 void redraw(){
@@ -95,7 +121,9 @@ void redraw(){
 
     //PAVIMENTO
     glPushMatrix();
-        glColor3f(0,0.19,0.05);
+        ChrTree::resetMaterial();
+        glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,new float[3]{0,0.19,0.05});
+        //glColor3f(0,0.19,0.05);
         glTranslatef(0,-(albero.getTroncoHeight()+0.007),0);
         glRotatef(270,1,0,0);
             pavimento->drawDisk(0,3,50,50);
@@ -114,13 +142,34 @@ int main(int argc, char** argv) {
         glutCreateWindow("Christmas_Tree");
         glutKeyboardFunc(keyboardListener);
         glutDisplayFunc(redraw);
+        glutTimerFunc(2000,lightSwitch,0);
 
     //GL INIT
+        glEnable(GL_NORMALIZE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-        glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_LIGHT1);
 
+    //LIGHT INIT
+        glLightfv(GL_LIGHT1,GL_DIFFUSE,new float[3]{1,1,1});
+        glLightfv(GL_LIGHT1,GL_SPECULAR,new float[3]{1,1,1});
+        glLightfv(GL_LIGHT1,GL_POSITION, new float[4]{5,30,0,1});
+
+        glLightfv(GL_LIGHT2,GL_DIFFUSE,new float[3]{1,1,1});
+        glLightfv(GL_LIGHT2,GL_SPECULAR,new float[3]{1,1,1});
+        glLightfv(GL_LIGHT3,GL_SPECULAR,new float[3]{1,1,1});
+        glLightfv(GL_LIGHT3,GL_DIFFUSE,new float[3]{1,1,1});
+
+        glLightfv(GL_LIGHT4,GL_DIFFUSE,new float[3]{.5,0,0});
+        glLightfv(GL_LIGHT4,GL_SPECULAR,new float[3]{.5,0,0});
+        glLightfv(GL_LIGHT5,GL_SPECULAR,new float[3]{.5,0,0});
+        glLightfv(GL_LIGHT5,GL_DIFFUSE,new float[3]{.5,0,0});
+
+        glLightfv(GL_LIGHT6,GL_DIFFUSE,new float[3]{147./255.,112./255.,219/255.});
+        glLightfv(GL_LIGHT6,GL_SPECULAR,new float[3]{147./255.,112./255.,219/255.});
+        glLightfv(GL_LIGHT7,GL_SPECULAR,new float[3]{147./255.,112./255.,219/255.});
+        glLightfv(GL_LIGHT7,GL_DIFFUSE,new float[3]{147./255.,112./255.,219/255.});
+        
     //INIT CHRISTMAS STAR
         pavimento=new GluSolidFigure(GLU_FILL,GLU_OUTSIDE,GLU_FLAT);
         stella.buildFromFile("chr_tree/json/star.json");

@@ -6,6 +6,13 @@
 using json = nlohmann::json;
 using namespace Mesh;
 
+void Tree::ChrTree::resetMaterial(){
+    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,new float[4]{0.8,0.8,0.8,1});
+    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,new float[4]{0,0,0,1});
+    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,new float[4]{0,0,0,1});
+    glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,0);      
+}
+
 void Tree::ChrTree::buildTreeFromFile(const char* path){
     char a[2];
 
@@ -54,14 +61,17 @@ void Tree::ChrTree::buildTreeFromFile(const char* path){
 void Tree::ChrTree::draw() const{
     
     //DRAW TRONCO
-        glColor3fv(&paramTronco[4]);
+        //glColor3fv(&paramTronco[4]);
+        resetMaterial();
+        glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&paramTronco[4]);
+
         glPushMatrix();
             glRotatef(90,1,0,0);
             tronco->drawCylinder(paramTronco[0],paramTronco[0],paramTronco[1],(int)paramTronco[2],(int)paramTronco[3]);
         glPopMatrix();
 
     //DRAW BASE TRONCO
-        glColor3fv(&paramTronco[4]);
+        //glColor3fv(&paramTronco[4]);
         glPushMatrix();
             glTranslatef(0,-paramTronco[1],0);
             glRotatef(90,1,0,0);
@@ -73,7 +83,9 @@ void Tree::ChrTree::draw() const{
     float spostamento=0;
         for(int i = 0; i < (int)paramCono[0]; i++)
         {
-                glColor3fv(&(color[2])[0]);
+               // glColor3fv(&(color[2])[0]);
+               resetMaterial();
+               glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&(color[2])[0]);
                 glPushMatrix();
                     glTranslatef(0,spostamento,0);
                     glRotatef(270,1,0,0);
