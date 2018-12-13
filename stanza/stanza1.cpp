@@ -3,7 +3,6 @@
 #include<GL/glut.h>
 #include<iostream>
 #include "../utility/mesh.h"
-#include "SOIL/SOIL.h"
 #include <math.h>
 using namespace std;
 using namespace Mesh;
@@ -32,16 +31,11 @@ BezierSurface* surface;
             colorApplique1[3]={255./255.,197/255.,143/255.},
             colorApplique2[3]={241./255.,141./255.,0./255.};
 
-//TEXTURE 
-    GLuint textures[3];
-
 void resetMaterial(){
     glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,new float[4]{0.8,0.8,0.8,1});
     glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,new float[4]{0,0,0,1});
     glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,new float[4]{0,0,0,1});
-    glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,0);
-    glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
-    glBindTexture(GL_TEXTURE_2D,0);
+    glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,0);      
 }
 
 void lightOn(){
@@ -89,9 +83,6 @@ void redraw(void){
     //COLORE PER LE PARETI LATERALI
         resetMaterial();
         glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,colorParete1);
-    
-     //TEXTURE MATTONE PER LE PARETI
-        glBindTexture(GL_TEXTURE_2D,textures[0]);
 
     //PARETE SX    
         glPushMatrix();
@@ -109,9 +100,6 @@ void redraw(void){
 
         resetMaterial();
         glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,colorParete2);
-
-    //TEXTURE MATTONE PER LE PARETI
-        glBindTexture(GL_TEXTURE_2D,textures[0]);
 
     //PARETE INFONDO    
         glPushMatrix();
@@ -136,9 +124,6 @@ void redraw(void){
         glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,colorPavimento);
         glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,new float[4]{1,1,1,1});
 
-    //TEXTURE PAVIMENTO
-        glBindTexture(GL_TEXTURE_2D,textures[1]);
-
     //PAVIMENTO
         glPushMatrix();
             glScalef(1,0.5,0.5);
@@ -158,21 +143,18 @@ void redraw(void){
             glRotatef(90,1,0,0);
                 surface->drawCurve();
         glPopMatrix();
-    
+
+
     //COLOR APPLIQUE SX
         resetMaterial();
         glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,colorApplique1);
-
-    //TEXTURE TESSUTO
-        glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
-        glBindTexture(GL_TEXTURE_2D,textures[2]);
 
     //APPLIQUE PARETE SX
         glPushMatrix();
             glScalef(1,1,0.3);
             glTranslatef(.7,.1,.051);
                 glutSolidCube(0.1);
-                glLightfv(GL_LIGHT1,GL_POSITION, new float[4]{0,0,0.51,1});
+                glLightfv(GL_LIGHT1,GL_POSITION, new float[4]{0,0,.51,1});
         glPopMatrix();
         glPushMatrix();
             glScalef(1,1,0.3);
@@ -184,10 +166,6 @@ void redraw(void){
     //COLOR APPLIQUE DX
         resetMaterial();
         glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,colorApplique2);
-
-    //TEXTURE TESSUTO
-        glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
-        glBindTexture(GL_TEXTURE_2D,textures[2]);
 
     //APPLIQUE PARETE DX
         glPushMatrix();
@@ -205,7 +183,7 @@ void redraw(void){
                 glLightfv(GL_LIGHT4,GL_POSITION, new float[4]{0,0,-0.51,1});
         glPopMatrix();
 
-    glutSwapBuffers();
+    glFlush();
 }
 
 void moveCamera(float speed){
@@ -245,6 +223,20 @@ void mouseListener(int x, int y){
 	if((center[1] - camera[1]) <-8)  center[1]= camera[1] - 8.;
 	
 	rotateView(-angleY);
+/*
+    cout<<"--------------------\n";
+
+    cout<<"Camera[0]: "<<camera[0]<<endl;
+    cout<<"Camera[1]: "<<camera[1]<<endl;
+    cout<<"Camera[2]: "<<camera[2]<<endl;
+
+    cout<<"Center[0]: "<<center[0]<<endl;
+    cout<<"Center[1]: "<<center[1]<<endl;
+    cout<<"Center[2]: "<<center[2]<<endl;
+
+    cout<<"--------------------\n";
+*/
+
     glutPostRedisplay();
 }
 
@@ -277,35 +269,13 @@ void keyboardListener(unsigned char key, int x, int y){
     glutPostRedisplay();
 }
 
-GLvoid initTexture(const char* path, int pos,bool mipMap){
-    int imageWidth, imageHeight, components;
-    unsigned char *image;
-    unsigned *sImage;
-    glBindTexture(GL_TEXTURE_2D,textures[pos]);
-    image=SOIL_load_image(path,&imageWidth,&imageHeight,&components,SOIL_LOAD_RGBA);
-    glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    GLsizei sWidth=imageWidth*4, sHeight=imageHeight*4;
-    //sImage = (unsigned *)malloc( sWidth*sHeight*4*sizeof( unsigned ) );
-   // gluScaleImage( GL_RGBA, imageWidth, imageHeight, GL_UNSIGNED_BYTE, image,sWidth, sHeight, GL_UNSIGNED_BYTE, sImage );
-    if(mipMap){
-        glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST_MIPMAP_LINEAR);
-        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, imageWidth,imageHeight,GL_RGBA, GL_UNSIGNED_BYTE, image);
-    }
-    else
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight,0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-    
-    SOIL_free_image_data(image);
-    glEnable( GL_TEXTURE_2D );
-}
-
-
 int main(int argc, char* argv[]){
     //INIT GLUT
         glutInit(&argc,argv); 
-        glutInitDisplayMode(GLUT_RGB| GLUT_DEPTH | GLUT_DOUBLE);
+        glutInitDisplayMode(GLUT_RGB| GLUT_DEPTH);
         glutInitWindowPosition(windowPos[0],windowPos[1]);
         glutInitWindowSize(width,height);
-        glutCreateWindow("Stanza_Texture");
+        glutCreateWindow("Stanza");
         glutKeyboardFunc(keyboardListener);
         glutPassiveMotionFunc(mouseListener);
         glutDisplayFunc(redraw);
@@ -319,10 +289,6 @@ int main(int argc, char* argv[]){
         glEnable(GL_LIGHT3);
         glEnable(GL_LIGHT4);
         glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-        glTexGeni(GL_S,GL_TEXTURE_GEN_MODE,GL_EYE_LINEAR);
-        glTexGeni(GL_T,GL_TEXTURE_GEN_MODE,GL_EYE_LINEAR);
-        glEnable(GL_TEXTURE_GEN_S);
-        glEnable(GL_TEXTURE_GEN_T);
 
 
     //BUILD GRID
@@ -346,14 +312,6 @@ int main(int argc, char* argv[]){
         surface->addCheckpoint(-0.5, 2,0,1);
         surface->addCheckpoint(0.5, 2,0,1);
         surface->addCheckpoint(2, 2,0,1);
-
-
-    //LOAD TEXTURE
-       glGenTextures(3,textures);
-       initTexture("stanza/brick.jpg",0,true);
-       initTexture("stanza/floor.jpg",1,true);
-       initTexture("stanza/violet.jpg",2,false);
-
 
     //DISPLAY    
         glutMainLoop();

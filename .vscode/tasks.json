@@ -160,7 +160,7 @@
                         "dependencies/tinyxml2.cpp",
                         "dependencies/json.hpp",
                         "utility/*.cpp",
-                        "./stanza/*.cpp",
+                        "./stanza/stanza2.cpp",
                         "-lmingw32",
                         "-lopengl32",
                         "-lglut32",
@@ -174,14 +174,49 @@
                         "dependencies/tinyxml2.cpp",
                         "dependencies/json.hpp",
                         "utility/*.cpp",
-                        "./stanza/*.cpp",
+                        "./stanza/stanza2.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lSOIL",
+                        "-lglut"
+                    ],
+                }
+            },
+
+
+            {
+                "label": "compileTexture",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "dependencies/tinyxml2.cpp",
+                        "dependencies/json.hpp",
+                        "utility/*.cpp",
+                        "./texture/*.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "./texture/texture3.cpp",
                         "-lGL",
                         "-lGLU",
                         "-lglut"
                     ],
                 }
             },
-
 
 
             {
