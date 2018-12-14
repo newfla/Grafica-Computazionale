@@ -29,8 +29,8 @@ BezierSurface* surface;
     float colorParete1[3]={245./255.,245./255.,220/255.},
             colorParete2[3]={245./(2.*255.),245./(2.*255.),220/(2.*255.)},
             colorPavimento[3]={41./255.,86./255.,143./255.},
-            colorApplique1[3]={255./255.,197/255.,143/255.},
-            colorApplique2[3]={241./255.,141./255.,0./255.};
+            colorApplique1[3]={1,1,1},
+            colorApplique2[3]={1,1,1};
 
 //TEXTURE 
     GLuint textures[3];
@@ -58,6 +58,109 @@ void lightOn(){
 
         glLightfv(GL_LIGHT4,GL_DIFFUSE,new float[4]{0.33,80./255.,74./255.,0});
         glLightfv(GL_LIGHT4,GL_SPECULAR,new float[4]{0.7,0.7,0.7,0});
+}
+
+void drawLongSide(){
+    glPushMatrix();
+        glTranslatef(-1.6,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-1.4,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-1.2,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-1,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-.8,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-.6,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-.4,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-.2,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+        
+        glPushMatrix();
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(.2,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(.4,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(.6,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(.8,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(1,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(1.2,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(1.4,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(1.6,0,0);
+            glScalef(.2,0.2,1);
+                surface->drawCurve();
+        glPopMatrix();
 }
 
 
@@ -93,18 +196,15 @@ void redraw(void){
      //TEXTURE MATTONE PER LE PARETI
         glBindTexture(GL_TEXTURE_2D,textures[0]);
 
-    //PARETE SX    
-        glPushMatrix();
-            glScalef(1,0.2,1);
-                surface->drawCurve();
-        glPopMatrix();
+    //PARETE SX
+
+        drawLongSide();
 
     //PARETE DX
         glPushMatrix();
-            glScalef(1,0.2,1);
             glTranslatef(0,0,2);
             glRotatef(180,1,0,0);
-                surface->drawCurve();
+                drawLongSide();
         glPopMatrix();
 
         resetMaterial();
@@ -141,11 +241,12 @@ void redraw(void){
 
     //PAVIMENTO
         glPushMatrix();
-            glScalef(1,0.5,0.5);
-            glTranslatef(0,-.8,2);
+            glScalef(1,1,2.5);
+            glTranslatef(0,-.4,.4);
             glRotatef(270,1,0,0);
-                surface->drawCurve();
+               drawLongSide();
         glPopMatrix();
+
 
     //COLORE PER IL SOFFITTO
         resetMaterial();
@@ -153,10 +254,10 @@ void redraw(void){
 
     //SOFFITTO
         glPushMatrix();
-            glScalef(1,0.5,0.5);
-            glTranslatef(0,.8,2);
+            glScalef(1,1,2.5);
+            glTranslatef(0,.4,.4);
             glRotatef(90,1,0,0);
-                surface->drawCurve();
+                drawLongSide();
         glPopMatrix();
     
     //COLOR APPLIQUE SX
@@ -270,7 +371,7 @@ void keyboardListener(unsigned char key, int x, int y){
             moveCamera(cameraSpeed);
             break;
 
-        default:
+        case 27:
             exit(0);
     }
 
@@ -280,13 +381,9 @@ void keyboardListener(unsigned char key, int x, int y){
 GLvoid initTexture(const char* path, int pos,bool mipMap){
     int imageWidth, imageHeight, components;
     unsigned char *image;
-    unsigned *sImage;
     glBindTexture(GL_TEXTURE_2D,textures[pos]);
     image=SOIL_load_image(path,&imageWidth,&imageHeight,&components,SOIL_LOAD_RGBA);
     glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    GLsizei sWidth=imageWidth*4, sHeight=imageHeight*4;
-    //sImage = (unsigned *)malloc( sWidth*sHeight*4*sizeof( unsigned ) );
-   // gluScaleImage( GL_RGBA, imageWidth, imageHeight, GL_UNSIGNED_BYTE, image,sWidth, sHeight, GL_UNSIGNED_BYTE, sImage );
     if(mipMap){
         glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST_MIPMAP_LINEAR);
         gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, imageWidth,imageHeight,GL_RGBA, GL_UNSIGNED_BYTE, image);
@@ -296,6 +393,12 @@ GLvoid initTexture(const char* path, int pos,bool mipMap){
     
     SOIL_free_image_data(image);
     glEnable( GL_TEXTURE_2D );
+    if( 0 == image )
+{
+	cout<<"SOIL loading error: "<<endl<<SOIL_last_result();
+    cout<<endl<<"--------"<<endl;
+}
+
 }
 
 
@@ -319,8 +422,8 @@ int main(int argc, char* argv[]){
         glEnable(GL_LIGHT3);
         glEnable(GL_LIGHT4);
         glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-        glTexGeni(GL_S,GL_TEXTURE_GEN_MODE,GL_EYE_LINEAR);
-        glTexGeni(GL_T,GL_TEXTURE_GEN_MODE,GL_EYE_LINEAR);
+        glTexGeni(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+        glTexGeni(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
         glEnable(GL_TEXTURE_GEN_S);
         glEnable(GL_TEXTURE_GEN_T);
 
@@ -352,7 +455,7 @@ int main(int argc, char* argv[]){
        glGenTextures(3,textures);
        initTexture("stanza/brick.jpg",0,true);
        initTexture("stanza/floor.jpg",1,true);
-       initTexture("stanza/violet.jpg",2,false);
+       initTexture("stanza/violet2.jpg",2,true);
 
 
     //DISPLAY    

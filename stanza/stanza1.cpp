@@ -262,7 +262,7 @@ void keyboardListener(unsigned char key, int x, int y){
             moveCamera(cameraSpeed);
             break;
 
-        default:
+        case 27:
             exit(0);
     }
 
