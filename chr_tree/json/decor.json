@@ -13,7 +13,10 @@
                     0.5,
                     0.5
                 ],
-                "rays":0.15
+                "rays":0.15,
+                "texture":true,
+                "pos":4,
+                "path":"chr_tree/texture/decor1.jpg"
             },
             {
                 "color":[
@@ -26,7 +29,10 @@
                     0.5,
                     0.5
                 ],
-                "rays":0.15
+                "rays":0.15,
+                "texture":true,
+                "pos":5,
+                "path":"chr_tree/texture/decor2.jpg"
             }
         ]
 }

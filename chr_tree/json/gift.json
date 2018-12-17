@@ -90,5 +90,7 @@
             ],
             "side":0.25
         }
-    ]
+    ],
+    "texture":true,
+    "path":"chr_tree/texture/gift.png"
 }

@@ -393,12 +393,10 @@ GLvoid initTexture(const char* path, int pos,bool mipMap){
     
     SOIL_free_image_data(image);
     glEnable( GL_TEXTURE_2D );
-    if( 0 == image )
-{
+    if( 0 == image ){
 	cout<<"SOIL loading error: "<<endl<<SOIL_last_result();
     cout<<endl<<"--------"<<endl;
-}
-
+    }
 }
 
 
@@ -456,6 +454,11 @@ int main(int argc, char* argv[]){
        initTexture("stanza/brick.jpg",0,true);
        initTexture("stanza/floor.jpg",1,true);
        initTexture("stanza/violet2.jpg",2,true);
+
+       for(int i = 0; i < 3; i++)
+    {
+        cout<<textures[i]<<endl;
+    }
 
 
     //DISPLAY    

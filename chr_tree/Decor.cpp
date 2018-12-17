@@ -3,21 +3,27 @@
 #include<fstream>
 using json = nlohmann::json;
 
-Tree::Decor::Decor(float radius, int slices, int stacks, vector<float>color, vector<float>scale){
+Tree::Decor::Decor(float radius, int slices, int stacks, vector<float>color, vector<float>scale,int pos){
     this->radius=radius;
     this->slices=slices;
     this->stacks=stacks;
     this->color=color;
     this->scale=scale;
+    this->pos=pos;
 }
 
-void Tree::Decor::draw(float x, float y) const{
+void Tree::Decor::draw(float x, float y,Tree::TreeTextureContainer* container) const{
     //SET COLOR
-        //glColor3fv(&color[0]);
         ChrTree::resetMaterial();
         glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,128);    
         glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&color[0]);
         glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,new float[4]{1,1,1,1});
+
+    //CHECK TEXTURE
+        if(pos!=0){
+            glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,new float[3]{1,1,1});
+                    glBindTexture(GL_TEXTURE_2D,container->getPos(pos));
+        }
         
     //DRAW DECOR
         glPushMatrix();
@@ -27,7 +33,7 @@ void Tree::Decor::draw(float x, float y) const{
         glPopMatrix();
 }
 
-vector<Tree::Decor> Tree::Decor::buildDecorsFromFile(const char* path){
+vector<Tree::Decor> Tree::Decor::buildDecorsFromFile(const char* path,Tree::TreeTextureContainer* container){
     
     //VAR DECLARATION
         int slices,stacks;
@@ -45,6 +51,7 @@ vector<Tree::Decor> Tree::Decor::buildDecorsFromFile(const char* path){
     
     for(int i = 0; i < j["decor"].size(); i++){
         vector<float> color,scale;
+        int pos=0;
         //FIND COLOR
             color.push_back(j["decor"][i]["color"][0]);
             color.push_back(j["decor"][i]["color"][1]);
@@ -53,7 +60,15 @@ vector<Tree::Decor> Tree::Decor::buildDecorsFromFile(const char* path){
             scale.push_back(j["decor"][i]["scale"][0]);
             scale.push_back(j["decor"][i]["scale"][1]);
             scale.push_back(j["decor"][i]["scale"][2]);
-        decors.push_back(Decor(j["decor"][i]["rays"],slices,stacks,color,scale));
+
+        //CHECK TEXTURE PARAM
+        if(j["decor"][i]["texture"]){
+
+            pos=j["decor"][i]["pos"];
+            string temp=j["decor"][i]["path"];
+            container->initTexture(temp.c_str(),pos,true);
+        }
+        decors.push_back(Decor(j["decor"][i]["rays"],slices,stacks,color,scale,pos));
     }
     
 

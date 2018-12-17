@@ -11,9 +11,10 @@ Tree::Gift::Gift(vector<float>colorRibbon,vector<float>colorBox,vector<float>sca
     this->scale=scale;
 }
 
-vector<Tree::Gift> Tree::Gift::buildGiftsFromFile(const char* path){
+vector<Tree::Gift> Tree::Gift::buildGiftsFromFile(const char* path, Tree::TreeTextureContainer* container){
     //VAR DECLARATION
         vector<Tree::Gift> gifts;
+        bool texture=false;
 
     //LOAD FILE
         std::ifstream i(path);
@@ -36,14 +37,23 @@ vector<Tree::Gift> Tree::Gift::buildGiftsFromFile(const char* path){
             colorRibbon.push_back(j["gift"][i]["colorRibbon"][0]);
             colorRibbon.push_back(j["gift"][i]["colorRibbon"][1]);
             colorRibbon.push_back(j["gift"][i]["colorRibbon"][2]);
+        //FIND TEXTURE
+            if(j["texture"]){
+            texture=true;
+            string temp=j["path"];
+            container->initTexture(temp.c_str(),3,true);
+        }
             
         Tree::Gift gif=Gift(colorRibbon,color,scale,j["gift"][i]["side"],new Mesh::NurbsCurve("chr_tree/json/ribbon.json"));
+
+        if(texture)
+            gif.texture=true;
         gifts.push_back(gif);
     }
     return gifts;
 }
 
-void Tree::Gift::draw(float x, float y) const{
+void Tree::Gift::draw(float x, float y, Tree::TreeTextureContainer* container) const{
 
     //SET COLOR RIBBON
         glPushMatrix();
@@ -54,17 +64,22 @@ void Tree::Gift::draw(float x, float y) const{
             
                 //DRAW RIBBON
                 ChrTree::resetMaterial();
-                glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&colorRibbon[0]);
-                //glColor3fv(&colorRibbon[0]);
-                glPushMatrix();
-                    glTranslatef(0,0,(double)side/2+0.00000000000000002);
-                    glScalef(0.05,0.05,0.05);
-                    ribbon->drawCurve();
-                glPopMatrix();
+                if(!texture){
+                    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&colorRibbon[0]);
+                    glPushMatrix();
+                        glTranslatef(0,0,(double)side/2+0.00000000000000002);
+                        glScalef(0.05,0.05,0.05);
+                        ribbon->drawCurve();
+                    glPopMatrix();
+                }
                 //DRAW BOX
-                 ChrTree::resetMaterial();
+                ChrTree::resetMaterial();
                 glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&colorBox[0]);
-               // glColor3fv(&colorBox[0]);
+
+               if(texture){
+                    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,new float[3]{1,1,1});
+                    glBindTexture(GL_TEXTURE_2D,container->getPos(3));
+               }
                 glutSolidCube(side);
         glPopMatrix();
 }

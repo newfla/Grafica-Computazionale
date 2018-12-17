@@ -162,6 +162,7 @@
                         "utility/*.cpp",
                         "./stanza/stanza2.cpp",
                         "-lmingw32",
+                        "-lSOIL",
                         "-lopengl32",
                         "-lglut32",
                         "-lglu32"
@@ -380,6 +381,7 @@
                         "utility/*.cpp",
                         "./chr_tree/*.cpp",
                         "-lmingw32",
+                        "-lSOIL",
                         "-lopengl32",
                         "-lglut32",
                         "-lglu32"
@@ -395,6 +397,7 @@
                         "./chr_tree/*.cpp",
                         "-lGL",
                         "-lGLU",
+                        "-lSOIL",
                         "-lglut"
                     ],
                 }

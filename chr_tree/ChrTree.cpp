@@ -1,8 +1,6 @@
 #include "tree.h"
 #include "../dependencies/json.hpp"
 #include<fstream>
-#include  <random>
-#include  <iterator>
 using json = nlohmann::json;
 using namespace Mesh;
 
@@ -10,11 +8,15 @@ void Tree::ChrTree::resetMaterial(){
     glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,new float[4]{0.8,0.8,0.8,1});
     glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,new float[4]{0,0,0,1});
     glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,new float[4]{0,0,0,1});
-    glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,0);      
+    glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,0);
+    glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
+    glTexGeni(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+    glTexGeni(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+    glBindTexture(GL_TEXTURE_2D,0);      
 }
 
-void Tree::ChrTree::buildTreeFromFile(const char* path){
-    char a[2];
+
+void Tree::ChrTree::buildTreeFromFile(const char* path, Tree::TreeTextureContainer* container){
 
     //LOAD FILE
         std::ifstream i(path);
@@ -38,6 +40,7 @@ void Tree::ChrTree::buildTreeFromFile(const char* path){
         paramCono.push_back(j["cono"]["height"]);
         paramCono.push_back(j["cono"]["slices"]);
         paramCono.push_back(j["cono"]["stacks"]);
+
     //COLOR CONI
         vector<float> primary, dark, light;
 
@@ -56,14 +59,30 @@ void Tree::ChrTree::buildTreeFromFile(const char* path){
         color.push_back(dark);
         color.push_back(primary);
         color.push_back(light);
+
+    //TEXURE TRONCO
+        if(j["tronco"]["texture"]){
+            texture[0]=true;
+            string temp=j["tronco"]["path"];
+            container->initTexture(temp.c_str(),0,true);
+        }
+    //TEXURE CONO
+        if(j["cono"]["texture"]){
+            texture[1]=true;
+            string temp2=j["cono"]["path"];
+            container->initTexture(temp2.c_str(),1,true);
+        }
 }
 
-void Tree::ChrTree::draw() const{
+void Tree::ChrTree::draw(Tree::TreeTextureContainer* container) const{
     
     //DRAW TRONCO
-        //glColor3fv(&paramTronco[4]);
         resetMaterial();
         glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&paramTronco[4]);
+        if(texture[0]){
+             glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,new float[3]{1,1,1});
+            glBindTexture(GL_TEXTURE_2D,container->getPos(0));
+        }
 
         glPushMatrix();
             glRotatef(90,1,0,0);
@@ -71,21 +90,25 @@ void Tree::ChrTree::draw() const{
         glPopMatrix();
 
     //DRAW BASE TRONCO
-        //glColor3fv(&paramTronco[4]);
+        /*
         glPushMatrix();
             glTranslatef(0,-paramTronco[1],0);
             glRotatef(90,1,0,0);
             baseTronco->drawDisk(0,paramTronco[0],(int)paramTronco[2],(int)paramTronco[3]);
         glPopMatrix();
+        */
 
     //DRAW CONI
     float height=paramCono[2]/paramCono[0];
     float spostamento=0;
         for(int i = 0; i < (int)paramCono[0]; i++)
         {
-               // glColor3fv(&(color[2])[0]);
-               resetMaterial();
-               glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&(color[2])[0]);
+                resetMaterial();
+                glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,&(color[2])[0]);
+                if(texture[1]){
+                    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,new float[3]{1,1,1});
+                    glBindTexture(GL_TEXTURE_2D,container->getPos(1));
+                }
                 glPushMatrix();
                     glTranslatef(0,spostamento,0);
                     glRotatef(270,1,0,0);
@@ -98,12 +121,12 @@ void Tree::ChrTree::draw() const{
                 {
                     glPushMatrix();
                         glRotatef(j-30,0,1,0);
-                        palline[i%palline.size()==0].draw(paramCono[1]-spostamento/2,spostamento);
+                        palline[i%palline.size()==0].draw(paramCono[1]-spostamento/2,spostamento,container);
                     glPopMatrix();
 
                     glPushMatrix();
                         glRotatef(j-15.,0,1,0);
-                            palline[i+1%palline.size()==0].draw(paramCono[1]-spostamento/2,spostamento);
+                            palline[i+1%palline.size()==0].draw(paramCono[1]-spostamento/2,spostamento,container);
                     glPopMatrix();  
                 }
                 spostamento+=0.4;
