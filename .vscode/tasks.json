@@ -46,7 +46,7 @@
                     "args": [
                         "-g",
                         "-std=c++11",
-                        "./bubble/*.c",
+                        "./bubble/gladWindows.c",
                         "./bubble/*.cpp",
                         "-lmingw32",
                         "-lopengl32",
@@ -58,8 +58,9 @@
                     "args": [
                         "-g",
                         "-std=c++11",
-                        "./bubble/*.c",
+                        "./bubble/gladLinux.c",
                         "./bubble/*.cpp",
+                        "-ldl",
                         "-lGL",
                         "-lGLU",
                         "-lglut"
