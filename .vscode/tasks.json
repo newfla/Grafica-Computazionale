@@ -33,6 +33,40 @@
                     ],
                 }
             },
+
+            {
+                "label": "compileBubble",
+                "command": "g++",
+                "type": "shell",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                    },
+                "windows":{
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "./bubble/*.c",
+                        "./bubble/*.cpp",
+                        "-lmingw32",
+                        "-lopengl32",
+                        "-lglut32",
+                        "-lglu32"
+                    ],
+                },
+                "linux": {
+                    "args": [
+                        "-g",
+                        "-std=c++11",
+                        "./bubble/*.c",
+                        "./bubble/*.cpp",
+                        "-lGL",
+                        "-lGLU",
+                        "-lglut"
+                    ],
+                }
+            },
+
             {
                 "label": "compileFunzione",
                 "command": "g++",
