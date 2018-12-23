@@ -23,7 +23,7 @@ using namespace Tree;
     double camera[3]={-0.348782,1.31176,-4.98782};
     double up_vector[3]={0,1,0};
     double angle[2]={-94,1.31176};
-    float plane[2]={1,20};
+    float plane[2]={1,25};
     double dist=camera[2]-center[2];
     bool light=true;
 
