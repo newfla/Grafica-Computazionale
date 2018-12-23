@@ -1,5 +1,14 @@
+#if defined(_WIN32)
+    #define path "bubble/shader/windows/"
+#elif defined(__linux__)
+    #define path "bubble/shader/linux/"
+#endif
+
 #include "ShaderUtility.h"
 #include <GL/glut.h>
+#include <string>
+#include <sstream>
+
 ShaderUtility::Shader *shader;
 
 void display(){
@@ -65,7 +74,10 @@ int main(int argc, char** argv) {
 
 
     //SHADER INIT
-        shader=new ShaderUtility::Shader("bubble/shader/vertex.glsl","bubble/shader/fragment.glsl");
+        std:: stringstream ss, ss1;
+        ss<<path<<"vertex.glsl";
+        ss1<<path<<"fragment.glsl";
+        shader=new ShaderUtility::Shader(ss.str(),ss1.str());
 
     glutMainLoop();
 }
