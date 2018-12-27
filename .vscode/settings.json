@@ -42,6 +42,7 @@
         "numeric": "cpp",
         "valarray": "cpp",
         "iterator": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "ctime": "cpp"
     }
 }

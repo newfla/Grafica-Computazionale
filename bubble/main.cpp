@@ -5,79 +5,160 @@
 #endif
 
 #include "ShaderUtility.h"
-#include <GL/glut.h>
 #include <string>
 #include <sstream>
 
-ShaderUtility::Shader *shader;
+//VAR
+    ShaderUtility::Shader *shaderSkybox, *shaderSphere;
+    ShaderUtility::GlutListener *cameraListener;
+    ShaderUtility::Utility3D *utility3D;
 
-void display(){
-     float vertices[] = {
-         0.5f,  0.5f, 0.0f,  // top right
-         0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left 
-    };
-    unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 3,  // first Triangle
-        1, 2, 3   // second Triangle
-    };
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
-
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glBindVertexArray(0); 
-
-    // draw our first triangle
-    shader->use();
-    glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glFlush();
-
-}
-
-int main(int argc, char** argv) {
-
-    //GLUT INIT
-        glutInit(&argc, argv);
-        glutInitDisplayMode(GLUT_RGB| GLUT_DEPTH);
-        glutInitWindowPosition(300,100);
-        glutInitWindowSize(500,500);
-        glutCreateWindow("Soap_Bubble_Shading");
-        //glutFullScreen();
-        glutDisplayFunc(display);
-
-    //GLAD INIT
-        if (!gladLoadGL()){
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
+//TEXTURE PATH
+    std::vector<std::string> getUrls(){
+        return std::vector<std::string>{
+            "bubble/texture/posx.jpg",
+            "bubble/texture/negx.jpg",
+            "bubble/texture/posy.jpg",
+            "bubble/texture/negy.jpg",
+            "bubble/texture/posz.jpg",
+            "bubble/texture/negz.jpg",
+        };
     }
 
 
-    //SHADER INIT
-        std:: stringstream ss, ss1;
-        ss<<path<<"vertex.glsl";
-        ss1<<path<<"fragment.glsl";
-        shader=new ShaderUtility::Shader(ss.str(),ss1.str());
 
-    glutMainLoop();
+//KEYBOARD-CAMERA LISTENER
+    void keyboardListener(unsigned char key, int x, int y){
+        cameraListener->keyboardListener(key,x,y);
+        glutPostRedisplay();
+    }
+
+
+//MOUSE-CAMERA LISTENER
+void mouseListener(int x, int y){
+    cameraListener->mouseListener(x,y);
+    glutPostRedisplay();
+}
+
+
+void animation(){
+    utility3D->updateTransVector();
+    glutPostRedisplay();
+}
+
+
+//GLUT REDRAW CALLABCK
+    void display(){
+
+        //CLEAR
+            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        //PERSPECTIVE SETUP
+            float ratio=glutGet(GLUT_WINDOW_WIDTH)/glutGet(GLUT_WINDOW_HEIGHT);
+            glm::mat4 projection=glm::perspective(glm::radians(45.f),ratio,0.1f,100.0f);
+
+        
+        //DRAW BUBBLE
+            shaderSphere->use();
+
+            glm::mat4 model=glm::mat4(1.f);
+            model=glm::translate(model,utility3D->getTransVector());
+            glm::mat4 view=utility3D->getView(cameraListener);
+
+            utility3D->setModelMatrix(shaderSphere,model);
+            utility3D->setViewMatrix(shaderSphere,view);
+            utility3D->setProjectionMatrix(shaderSphere,projection);
+            utility3D->setCameraVector(shaderSphere,cameraListener);
+
+            utility3D->bindSphere();
+
+
+        //DRAW SKYBOX
+            glDepthFunc(GL_LEQUAL);
+            shaderSkybox->use();
+            view=glm::mat4(glm::mat3(view));
+
+            utility3D->setViewMatrix(shaderSkybox,view);
+            utility3D->setProjectionMatrix(shaderSkybox,projection);
+
+            utility3D->bindSkyBox();
+
+            glDepthFunc(GL_LESS);
+
+        glFlush();
+
+    }
+
+    
+
+    int main(int argc, char** argv) {
+
+        //GLUT INIT
+            glutInit(&argc, argv);
+            glutInitDisplayMode(GLUT_RGBA| GLUT_DEPTH);
+            glutInitWindowPosition(300,100);
+            glutInitWindowSize(900,900);
+            glutCreateWindow("Soap_Bubble_Shading");
+            //glutFullScreen();
+            glutKeyboardFunc(keyboardListener);
+            glutPassiveMotionFunc(mouseListener);
+            glutDisplayFunc(display);
+
+
+        //GLAD INIT
+            if (!gladLoadGL()){
+            std::cout << "Failed to initialize GLAD" << std::endl;
+            return -1;
+        }
+
+
+        //GL INIT
+            glEnable(GL_DEPTH_TEST);
+
+
+        //CAMERA LISTENER INIT
+            cameraListener=new ShaderUtility::GlutListener();
+
+
+        //SKYBOX SHADER INIT
+            std:: stringstream ss, ss1;
+            ss<<path<<"/skybox/vertex.glsl";
+            ss1<<path<<"/skybox/fragment.glsl";
+            shaderSkybox=new ShaderUtility::Shader(ss.str(),ss1.str());
+
+
+        //SPHERE SHADER INIT
+            std:: stringstream ss2, ss3;
+            ss2<<path<<"/sphere/vertex.glsl";
+            ss3<<path<<"/sphere/fragment.glsl";
+            shaderSphere=new ShaderUtility::Shader(ss2.str(),ss3.str());
+        
+
+        //3D UTILITY INIT
+            utility3D=new ShaderUtility::Utility3D();
+
+
+        //LOAD CUBEMAP TEXTURE
+            utility3D->loadTextureCubeMap(getUrls());
+
+        
+        //INIT SKYBOX CUBE
+            utility3D->initCubeSkyBox();
+            shaderSkybox->use();
+            shaderSkybox->setInt("skybox", 0);
+
+
+        //INIT SPHERE
+            utility3D->initSphere();
+            shaderSphere->use();
+            shaderSphere->setInt("skybox",0);
+
+        //TIMER FUNCTION MOVEMNT BUBBLE;
+            glutIdleFunc(animation);
+
+
+        //MAIN LOOP
+            glutMainLoop();
 }

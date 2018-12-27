@@ -49,6 +49,7 @@
                         "./bubble/gladWindows.c",
                         "./bubble/*.cpp",
                         "-lmingw32",
+                        "-lSOIL",
                         "-lopengl32",
                         "-lglut32",
                         "-lglu32"
@@ -63,6 +64,7 @@
                         "-ldl",
                         "-lGL",
                         "-lGLU",
+                        "-lSOIL", 
                         "-lglut"
                     ],
                 }

@@ -64,7 +64,6 @@ void keyboardListener(unsigned char key, int x, int y){
         angle[1]=60;
     if(angle[1]!=0)
         camera[1]=center[1]+(dist*sin(angle[1]*((double)M_PI/180.0)));
-
     glutPostRedisplay();
 }
 
