@@ -215,6 +215,6 @@ void ShaderUtility::Utility3D::updateTransVector(){
     else if(anim.x<-5.f)
         anim.y*=-1;
     anim.x+=0.0003*anim.y;
-    std::cout<<anim.x<<std::endl;
+    //std::cout<<anim.x<<std::endl;
 }
 

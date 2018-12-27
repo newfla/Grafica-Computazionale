@@ -1,15 +1,14 @@
 #version 320 es
 precision highp float;
+out vec4 FragColor;
+
 in vec3 Normal;
 in vec3 Position;
 
 uniform vec3 cameraPos;
 uniform samplerCube skybox;
 
-uniform float mRefractionRatio=1.02;
-uniform float mFresnelBias=0.1;
-uniform float mFresnelScale=1.0;
-uniform float mFresnelPower=2.0;
+
 
 void main(){    
     vec3 vReflect;
@@ -18,6 +17,11 @@ void main(){
     vec4 reflectedColor;
     vec4 refractedColor;
     float vReflectionFactor;
+
+    float mRefractionRatio=1.02;
+    float mFresnelBias=0.1;
+    float mFresnelScale=1.0;
+    float mFresnelPower=2.0;
 
     I = normalize(Position - cameraPos);
 
@@ -33,6 +37,5 @@ void main(){
 	refractedColor.g = textureCube( skybox, vec3( -vRefract[1].x, vRefract[1].yz ) ).g;
 	refractedColor.b = textureCube( skybox, vec3( -vRefract[2].x, vRefract[2].yz ) ).b;
 
-    gl_FragColor = mix( refractedColor, reflectedColor, clamp( vReflectionFactor, 0.0, 1.0 ) );
-   //gl_FragColor = vec4(texture(skybox, vReflect).rgb, 1.0);
+    FragColor = mix( refractedColor, reflectedColor, clamp( vReflectionFactor, 0.0, 1.0 ) );
 }
