@@ -28,21 +28,23 @@ ShaderUtility::Shader::Shader(std::string vertexPath, std::string fragmentPath){
 
 
 std::string  ShaderUtility::Shader::loadFileCode(std::string pathFile){
-    std:: string output;
-    std::ifstream shaderFile;
+    //VAR DECLARATION
+        std:: string output;
+        std::ifstream shaderFile;
 
     shaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 
-    try{
-        shaderFile.open(pathFile);
-        std::stringstream stream;
-        stream<<shaderFile.rdbuf();
-        shaderFile.close();
-        output=stream.str();
-    }
-    catch(std::ifstream::failure e){
-         std::cout << "ERROR::SHADER::FILE: "<< pathFile<<" NOT_SUCCESFULLY_READ" << std::endl;
-    }
+    //PARSE FILE
+        try{
+            shaderFile.open(pathFile);
+            std::stringstream stream;
+            stream<<shaderFile.rdbuf();
+            shaderFile.close();
+            output=stream.str();
+        }
+        catch(std::ifstream::failure e){
+            std::cout << "ERROR::SHADER::FILE: "<< pathFile<<" NOT_SUCCESFULLY_READ" << std::endl;
+        }
 
     return output;
 }

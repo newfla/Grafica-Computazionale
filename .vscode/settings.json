@@ -43,6 +43,7 @@
         "valarray": "cpp",
         "iterator": "cpp",
         "string": "cpp",
-        "ctime": "cpp"
+        "ctime": "cpp",
+        "random": "cpp"
     }
 }

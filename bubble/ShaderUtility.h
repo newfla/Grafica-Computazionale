@@ -1,5 +1,6 @@
 #ifndef SHADER_UTILITY_H
 #define SHADER_UTILITY_H
+#define  _USE_MATH_DEFINES 
 #include<glad/glad.h>
 #include <GL/glut.h>
 #include"SOIL/SOIL.h"
@@ -9,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include<vector>
+#include <cmath>
 
 namespace ShaderUtility{
     class Shader;
@@ -42,7 +44,7 @@ class ShaderUtility::GlutListener{
     private:
         glm::vec3 focus=glm::vec3(0.,0.,3.);
         glm::vec3 camera=glm::vec3(0.,0.,12.);
-        float cameraSpeed=0.03;
+        float cameraSpeed=0.04;
 
         void rotateView(float speed);
         void moveCamera(float speed);
@@ -69,9 +71,10 @@ class ShaderUtility::Utility3D{
         glm::vec4 perspective=glm::vec4(90,1,1,25);
         glm::vec2 anim=glm::vec2(0.,1.);
         unsigned int cubeMapTextureID, skyboxVAO, skyboxVBO, sphereVAO, sphereVBO;
+        std::vector<short> sphereIndices;
 
         std::vector<float> buildSkyBoxVertices();
-        std::vector<float> buildSphereVertices();
+        std::vector<float>  buildSphereVerticesNormalsIndices(float radius, int rings, int sectors);
 
         
 };
