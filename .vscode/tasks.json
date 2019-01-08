@@ -45,7 +45,7 @@
                 "windows":{
                     "args": [
                         "-g",
-                        "-std=c++11",
+                        "-std=gnu++11",
                         "./bubble/gladWindows.c",
                         "./bubble/*.cpp",
                         "-lmingw32",
