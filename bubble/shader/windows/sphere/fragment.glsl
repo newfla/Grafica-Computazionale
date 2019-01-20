@@ -28,10 +28,9 @@ void main(){
     reflectedColor = textureCube( skybox, vec3( -vReflect.x, vReflect.yz ) );
     refractedColor = vec4( 1.0 );
 
-    refractedColor.r = textureCube( skybox, vec3( -vRefract[0].x, vRefract[0].yz ) ).r;
-	refractedColor.g = textureCube( skybox, vec3( -vRefract[1].x, vRefract[1].yz ) ).g;
-	refractedColor.b = textureCube( skybox, vec3( -vRefract[2].x, vRefract[2].yz ) ).b;
+    refractedColor.r = textureCube( skybox, vRefract[0]).r;
+	refractedColor.g = textureCube( skybox, vRefract[1]).g;
+	refractedColor.b = textureCube( skybox, vRefract[2]).b;
 
     gl_FragColor = mix( refractedColor, reflectedColor, clamp( vReflectionFactor, 0.0, 1.0 ) );
-   //gl_FragColor = vec4(texture(skybox, vReflect).rgb, 1.0);
 }
