@@ -25,7 +25,7 @@ void main(){
 	vRefract[1] = refract( normalize( I ), Normal, mRefractionRatio * 0.99 );
 	vRefract[2] = refract( normalize( I ), Normal, mRefractionRatio * 0.98 );
     vReflectionFactor = mFresnelBias + mFresnelScale * pow( 1.0 + dot( normalize( I ), Normal ), mFresnelPower );
-    reflectedColor = textureCube( skybox, vec3( -vReflect.x, vReflect.yz ) );
+    reflectedColor = textureCube( skybox, vReflect );
     refractedColor = vec4( 1.0 );
 
     refractedColor.r = textureCube( skybox, vRefract[0]).r;
